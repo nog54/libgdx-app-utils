@@ -1,0 +1,46 @@
+apply plugin: "java"
+apply plugin: "eclipse"
+apply plugin: "maven"
+
+group = 'org.nognog'
+//archivesBaseName = 'zzz'
+version = '0.0.1-SNAPSHOT'
+
+sourceCompatibility = 1.7
+[compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
+
+sourceSets.main.java.srcDirs = ["src/main/java/"]
+sourceSets.test.java.srcDirs = ["src/test/java/"]
+sourceSets.main.resources.srcDirs = ["src/main/resources/"]
+sourceSets.test.resources.srcDirs = ["src/test/resources/"]
+
+eclipse.project { name = "libgdx-app-utils" }
+
+ext{ gdxVersion = '1.7.0' }
+
+buildscript {
+	repositories {
+		mavenCentral()
+		maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
+		jcenter()
+	}
+	dependencies {
+		classpath 'de.richsource.gradle.plugins:gwt-gradle-plugin:0.6'
+		classpath 'com.android.tools.build:gradle:1.2.3'
+		classpath 'org.robovm:robovm-gradle-plugin:1.6.0'
+	}
+}
+
+repositories {
+	mavenCentral()
+	maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
+	maven { url "https://oss.sonatype.org/content/repositories/releases/" }
+}
+
+dependencies {
+	compile "com.badlogicgames.gdx:gdx:$gdxVersion"
+	//compile "net.dermetfan.libgdx-utils:libgdx-utils:0.13.1"
+	testCompile "junit:junit:+"
+	testCompile "org.exparity:hamcrest-date:1.0.1"
+	testCompile "com.googlecode.jmockit:jmockit:1.4"
+}
