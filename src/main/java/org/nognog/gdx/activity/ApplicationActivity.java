@@ -25,7 +25,7 @@ import com.badlogic.gdx.Screen;
 public abstract class ApplicationActivity implements Screen {
 	private ActivityBasedApplication application;
 	
-	protected void changeActivity(ApplicationActivity activity) {
+	void moveTo(ApplicationActivity activity) {
 		this.application.setActivity(activity);
 	}
 
