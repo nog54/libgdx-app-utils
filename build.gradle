@@ -1,9 +1,10 @@
 apply plugin: "java"
 apply plugin: "eclipse"
 apply plugin: "maven"
+apply plugin: 'signing'
 
-group = 'org.nognog'
-//archivesBaseName = 'zzz'
+group = 'com.github.nog54'
+archivesBaseName = 'libgdx-app-utils'
 version = '0.0.1-SNAPSHOT'
 
 sourceCompatibility = 1.7
@@ -43,4 +44,66 @@ dependencies {
 	testCompile "junit:junit:+"
 	testCompile "org.exparity:hamcrest-date:1.0.1"
 	testCompile "com.googlecode.jmockit:jmockit:1.4"
+}
+
+task javadocJar(type: Jar) {
+	classifier = 'javadoc'
+	from javadoc
+}
+
+task sourcesJar(type: Jar) {
+	classifier = 'sources'
+	from sourceSets.main.allSource
+}
+
+artifacts { archives javadocJar, sourcesJar }
+
+signing { sign configurations.archives }
+
+uploadArchives {
+	repositories {
+		mavenDeployer {
+			beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
+
+			repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
+				authentication(userName: ossrhUsername, password: ossrhPassword)
+			}
+
+			snapshotRepository(url: "https://oss.sonatype.org/content/repositories/snapshots/") {
+				authentication(userName: ossrhUsername, password: ossrhPassword)
+			}
+
+			pom.project {
+				name 'com.github.nog54:libgdx-app-utils'
+				packaging 'jar'
+				// optionally artifactId can be defined here
+				description 'utility library for developing with libgdx'
+				url 'https://github.com/nog54/libgdx-app-utils'
+
+				scm {
+					connection 'scm:git:git@github.com:nog54/libgdx-app-utils.git'
+					developerConnection 'scm:git:git@github.com:nog54/libgdx-app-utils.git'
+					url 'git@github.com:nog54/libgdx-app-utils.git'
+				}
+
+
+
+
+				licenses {
+					license {
+						name 'The Apache License, Version 2.0'
+						url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+					}
+				}
+
+				developers {
+					developer {
+						id 'goshi'
+						name 'Goshi Noguchi'
+						email 'noggon54@gmail.com'
+					}
+				}
+			}
+		}
+	}
 }
