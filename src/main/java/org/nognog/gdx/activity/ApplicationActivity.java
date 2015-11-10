@@ -24,8 +24,11 @@ import com.badlogic.gdx.Screen;
  */
 public abstract class ApplicationActivity implements Screen {
 	private ActivityBasedApplication application;
-	
-	void moveTo(ApplicationActivity activity) {
+
+	/**
+	 * @param activity
+	 */
+	public void moveTo(ApplicationActivity activity) {
 		this.application.setActivity(activity);
 	}
 
@@ -35,6 +38,10 @@ public abstract class ApplicationActivity implements Screen {
 	public void setApplication(ActivityBasedApplication application) {
 		this.application = application;
 	}
+	
+	protected ActivityBasedApplication getApplication(){
+		return this.application;
+	}
 
 	/**
 	 * @return input processor
@@ -42,5 +49,15 @@ public abstract class ApplicationActivity implements Screen {
 	@SuppressWarnings("static-method")
 	public InputProcessor getInputProcessor() {
 		return null;
+	}
+
+	/**
+	 * @return true if this is being owned by the application
+	 */
+	public boolean isActive() {
+		if (this.application == null) {
+			return false;
+		}
+		return this.application.getActivity() == this;
 	}
 }
