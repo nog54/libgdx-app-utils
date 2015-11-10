@@ -30,10 +30,11 @@ public abstract class Switch extends Group {
 	public Switch() {
 		this(null);
 	}
-	
+
 	/**
 	 * constract new instance without listener
-	 * @param on 
+	 * 
+	 * @param on
 	 */
 	public Switch(boolean on) {
 		this(on, null);
@@ -51,7 +52,7 @@ public abstract class Switch extends Group {
 	/**
 	 * constract new instance with listener
 	 * 
-	 * @param on 
+	 * @param on
 	 * @param listener
 	 */
 	public Switch(boolean on, SwitchListener listener) {
@@ -121,4 +122,14 @@ public abstract class Switch extends Group {
 	public void setListener(SwitchListener listener) {
 		this.listener = listener;
 	}
+
+	/**
+	 * @param width
+	 */
+	public abstract void setWidth(int width);
+
+	/**
+	 * @param height
+	 */
+	public abstract void setHeight(int height);
 }

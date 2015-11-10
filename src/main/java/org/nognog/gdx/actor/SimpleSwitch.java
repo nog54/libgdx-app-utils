@@ -29,8 +29,8 @@ public class SimpleSwitch extends Switch {
 	private final Image onImage;
 	private final Image offImage;
 
-	private static final Texture onTexture = createSimpleTexture(new Color(0.2f, 1f, 0.2f, 1));
-	private static final Texture offTexture = createSimpleTexture(new Color(0.6f, 1f, 0.6f, 1));
+	private static final Texture defaultOnTexture = createSimpleTexture(new Color(0.2f, 1f, 0.2f, 1));
+	private static final Texture defaultOffTexture = createSimpleTexture(new Color(0.6f, 1f, 0.6f, 1));
 
 	private static final Texture createSimpleTexture(Color color) {
 		final Pixmap texturePixmap = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
@@ -43,18 +43,46 @@ public class SimpleSwitch extends Switch {
 	}
 
 	/**
-	 * 
+	 * @param initValue
+	 * @param width
+	 * @param height
 	 */
-	public SimpleSwitch() {
-		this(true, null);
+	public SimpleSwitch(boolean initValue, int width, int height) {
+		this(initValue, width, height, null);
 	}
 
 	/**
-	 * @param on
+	 * @param initValue
+	 * @param width
+	 * @param height
 	 * @param listener
 	 */
-	public SimpleSwitch(boolean on, SwitchListener listener) {
-		super(on, listener);
+	public SimpleSwitch(boolean initValue, int width, int height, SwitchListener listener) {
+		this(initValue, 0, 0, listener, defaultOnTexture, defaultOffTexture);
+	}
+
+	/**
+	 * @param initValue
+	 * @param width
+	 * @param height
+	 * @param listener
+	 * @param onTextureColor
+	 * @param offTextureColor
+	 */
+	public SimpleSwitch(boolean initValue, int width, int height, SwitchListener listener, Color onTextureColor, Color offTextureColor) {
+		this(initValue, width, height, listener, createSimpleTexture(onTextureColor), createSimpleTexture(offTextureColor));
+	}
+
+	/**
+	 * @param initValue
+	 * @param width
+	 * @param height
+	 * @param listener
+	 * @param onTexture
+	 * @param offTexture
+	 */
+	public SimpleSwitch(boolean initValue, int width, int height, SwitchListener listener, Texture onTexture, Texture offTexture) {
+		super(initValue, listener);
 		this.onImage = new Image(onTexture);
 		this.onImage.addListener(new ActorGestureListener() {
 			@SuppressWarnings("synthetic-access")
@@ -65,8 +93,7 @@ public class SimpleSwitch extends Switch {
 				SimpleSwitch.this.off();
 			}
 		});
-		final int switchSize = 100;
-		this.onImage.setSize(switchSize, switchSize);
+		this.onImage.setSize(width, height);
 		this.offImage = new Image(offTexture);
 		this.offImage.addListener(new ActorGestureListener() {
 			@SuppressWarnings("synthetic-access")
@@ -77,12 +104,24 @@ public class SimpleSwitch extends Switch {
 				SimpleSwitch.this.on();
 			}
 		});
-		this.offImage.setSize(switchSize, switchSize);
+		this.offImage.setSize(width, height);
 		if (this.isOn()) {
 			this.addActor(this.onImage);
 		} else {
 			this.addActor(this.offImage);
 		}
+	}
+
+	@Override
+	public void setWidth(int width) {
+		this.onImage.setWidth(width);
+		this.offImage.setWidth(width);
+	}
+
+	@Override
+	public void setHeight(int height) {
+		this.onImage.setHeight(height);
+		this.offImage.setHeight(height);
 	}
 
 }
