@@ -58,7 +58,7 @@ public class SimpleSwitch extends Switch {
 	 * @param listener
 	 */
 	public SimpleSwitch(boolean initValue, int width, int height, SwitchListener listener) {
-		this(initValue, 0, 0, listener, defaultOnTexture, defaultOffTexture);
+		this(initValue, width, height, listener, defaultOnTexture, defaultOffTexture);
 	}
 
 	/**
