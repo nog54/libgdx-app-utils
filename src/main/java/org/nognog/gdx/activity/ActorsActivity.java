@@ -16,10 +16,12 @@ package org.nognog.gdx.activity;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-
+import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.badlogic.gdx.utils.viewport.Viewport;
 
 /**
  * @author goshi 2015/09/18
@@ -31,15 +33,21 @@ public abstract class ActorsActivity extends ApplicationActivity {
 	 * 
 	 */
 	public ActorsActivity() {
-		this.stage = new Stage();
+		this(new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
 	}
 
-	
+	/**
+	 * @param viewport
+	 */
+	public ActorsActivity(Viewport viewport) {
+		this.stage = new Stage(viewport);
+	}
+
 	@Override
 	public InputProcessor getInputProcessor() {
 		return this.stage;
 	}
-	
+
 	@Override
 	public final void render(float delta) {
 		this.stage.act(delta);
@@ -67,5 +75,31 @@ public abstract class ActorsActivity extends ApplicationActivity {
 	 */
 	protected Stage getStage() {
 		return this.stage;
+	}
+
+	@Override
+	public void resize(int width, int height) {
+		this.stage.getViewport().update(width, height);
+	}
+
+	/**
+	 * @return width of viewport
+	 */
+	public float getLogicalViewportWidth() {
+		return this.stage.getViewport().getWorldWidth();
+	}
+
+	/**
+	 * @return height of viewport
+	 */
+	public float getLogicalViewportHeight() {
+		return this.stage.getViewport().getWorldHeight();
+	}
+
+	/**
+	 * @return camera
+	 */
+	public Camera getCamera() {
+		return this.stage.getCamera();
 	}
 }

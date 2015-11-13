@@ -17,9 +17,15 @@ package org.nognog.gdx.actor;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ActorGestureListener;
+import com.badlogic.gdx.utils.Align;
 
 /**
  * @author goshi 2015/09/18
@@ -28,6 +34,8 @@ public class SimpleSwitch extends Switch {
 
 	private final Image onImage;
 	private final Image offImage;
+	private Label onLabel;
+	private Label offLabel;
 
 	private static final Texture defaultOnTexture = createSimpleTexture(new Color(0.2f, 1f, 0.2f, 1));
 	private static final Texture defaultOffTexture = createSimpleTexture(new Color(0.6f, 1f, 0.6f, 1));
@@ -47,7 +55,7 @@ public class SimpleSwitch extends Switch {
 	 * @param width
 	 * @param height
 	 */
-	public SimpleSwitch(boolean initValue, int width, int height) {
+	public SimpleSwitch(boolean initValue, float width, float height) {
 		this(initValue, width, height, null);
 	}
 
@@ -57,7 +65,7 @@ public class SimpleSwitch extends Switch {
 	 * @param height
 	 * @param listener
 	 */
-	public SimpleSwitch(boolean initValue, int width, int height, SwitchListener listener) {
+	public SimpleSwitch(boolean initValue, float width, float height, SwitchListener listener) {
 		this(initValue, width, height, listener, defaultOnTexture, defaultOffTexture);
 	}
 
@@ -69,7 +77,7 @@ public class SimpleSwitch extends Switch {
 	 * @param onTextureColor
 	 * @param offTextureColor
 	 */
-	public SimpleSwitch(boolean initValue, int width, int height, SwitchListener listener, Color onTextureColor, Color offTextureColor) {
+	public SimpleSwitch(boolean initValue, float width, float height, SwitchListener listener, Color onTextureColor, Color offTextureColor) {
 		this(initValue, width, height, listener, createSimpleTexture(onTextureColor), createSimpleTexture(offTextureColor));
 	}
 
@@ -81,47 +89,129 @@ public class SimpleSwitch extends Switch {
 	 * @param onTexture
 	 * @param offTexture
 	 */
-	public SimpleSwitch(boolean initValue, int width, int height, SwitchListener listener, Texture onTexture, Texture offTexture) {
+	public SimpleSwitch(boolean initValue, float width, float height, SwitchListener listener, Texture onTexture, Texture offTexture) {
 		super(initValue, listener);
 		this.onImage = new Image(onTexture);
 		this.onImage.addListener(new ActorGestureListener() {
-			@SuppressWarnings("synthetic-access")
 			@Override
-			public void tap(InputEvent event, float x, float y, int count, int button) {
-				SimpleSwitch.this.removeActor(SimpleSwitch.this.onImage);
-				SimpleSwitch.this.addActor(SimpleSwitch.this.offImage);
-				SimpleSwitch.this.off();
+			public void touchDown(InputEvent event, float x, float y, int pointer, int button) {
+				SimpleSwitch.this.showOffActors();
+			}
+
+			@Override
+			public void pan(InputEvent event, float x, float y, float deltaX, float deltaY) {
+				final Actor touchingActor = SimpleSwitch.this.hit(x, y, true);
+				if (touchingActor == SimpleSwitch.this.getOffImage() || touchingActor == SimpleSwitch.this.getOnImage()) {
+					SimpleSwitch.this.showOffActors();
+				} else {
+					SimpleSwitch.this.showOnActors();
+				}
+			}
+
+			@Override
+			public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+				if (SimpleSwitch.this.hit(x, y, true) == SimpleSwitch.this.getOffImage()) {
+					SimpleSwitch.this.off();
+				} else {
+					SimpleSwitch.this.showOnActors();
+				}
+
 			}
 		});
-		this.onImage.setSize(width, height);
 		this.offImage = new Image(offTexture);
 		this.offImage.addListener(new ActorGestureListener() {
-			@SuppressWarnings("synthetic-access")
 			@Override
-			public void tap(InputEvent event, float x, float y, int count, int button) {
-				SimpleSwitch.this.removeActor(SimpleSwitch.this.offImage);
-				SimpleSwitch.this.addActor(SimpleSwitch.this.onImage);
-				SimpleSwitch.this.on();
+			public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+				if (SimpleSwitch.this.hit(x, y, true) == SimpleSwitch.this.getOffImage()) {
+					SimpleSwitch.this.on();
+				}
+
 			}
 		});
-		this.offImage.setSize(width, height);
+		this.onLabel = new Label("on", new LabelStyle(new BitmapFont(), Color.WHITE)); //$NON-NLS-1$
+		this.onLabel.setTouchable(Touchable.disabled);
+		this.offLabel = new Label("off", new LabelStyle(new BitmapFont(), Color.WHITE)); //$NON-NLS-1$
+		this.offLabel.setTouchable(Touchable.disabled);
+		this.setSize(width, height);
+		this.addActor(this.onImage);
+		this.addActor(this.onLabel);
+		this.addActor(this.offImage);
+		this.addActor(this.offLabel);
 		if (this.isOn()) {
-			this.addActor(this.onImage);
+			this.showOnActors();
 		} else {
-			this.addActor(this.offImage);
+			this.showOffActors();
 		}
 	}
 
 	@Override
-	public void setWidth(int width) {
-		this.onImage.setWidth(width);
-		this.offImage.setWidth(width);
+	protected void afterOn() {
+		this.showOnActors();
+	}
+
+	protected void showOnActors() {
+		this.offImage.setVisible(false);
+		this.offLabel.setVisible(false);
+		this.onImage.setVisible(true);
+		this.onLabel.setVisible(true);
 	}
 
 	@Override
-	public void setHeight(int height) {
-		this.onImage.setHeight(height);
-		this.offImage.setHeight(height);
+	protected void afterOff() {
+		this.showOffActors();
+	}
+
+	protected void showOffActors() {
+		this.onImage.setVisible(false);
+		this.onLabel.setVisible(false);
+		this.offImage.setVisible(true);
+		this.offLabel.setVisible(true);
+	}
+
+	@Override
+	protected void sizeChanged() {
+		this.onImage.setSize(this.getWidth(), this.getHeight());
+		this.offImage.setSize(this.getWidth(), this.getHeight());
+		this.onLabel.setPosition(this.getWidth() / 2, this.getHeight() / 2, Align.center);
+		this.offLabel.setPosition(this.getWidth() / 2, this.getHeight() / 2, Align.center);
+	}
+
+	/**
+	 * @return the onLabel
+	 */
+	public String getOnText() {
+		return this.onLabel.getText().toString();
+	}
+
+	/**
+	 * @param newText
+	 *            the newText to set
+	 */
+	public void setOnText(String newText) {
+		this.onLabel.setText(newText);
+	}
+
+	/**
+	 * @return the offLabel
+	 */
+	public String getOffText() {
+		return this.offLabel.getText().toString();
+	}
+
+	/**
+	 * @param newText
+	 *            the newText to set
+	 */
+	public void setOffText(String newText) {
+		this.offLabel.setText(newText);
+	}
+
+	protected Image getOnImage() {
+		return this.onImage;
+	}
+
+	protected Image getOffImage() {
+		return this.offImage;
 	}
 
 }

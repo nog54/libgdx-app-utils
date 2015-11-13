@@ -70,11 +70,8 @@ public abstract class Switch extends Group {
 		if (this.listener != null) {
 			this.listener.onFromOff();
 		}
-		this.turnOn();
-	}
-
-	private void turnOn() {
 		this.on = true;
+		this.afterOn();
 	}
 
 	/**
@@ -87,11 +84,8 @@ public abstract class Switch extends Group {
 		if (this.listener != null) {
 			this.listener.offFromOn();
 		}
-		this.turnOff();
-	}
-
-	private void turnOff() {
 		this.on = false;
+		this.afterOff();
 	}
 
 	/**
@@ -122,14 +116,7 @@ public abstract class Switch extends Group {
 	public void setListener(SwitchListener listener) {
 		this.listener = listener;
 	}
-
-	/**
-	 * @param width
-	 */
-	public abstract void setWidth(int width);
-
-	/**
-	 * @param height
-	 */
-	public abstract void setHeight(int height);
+	
+	protected abstract void afterOn();
+	protected abstract void afterOff();
 }
