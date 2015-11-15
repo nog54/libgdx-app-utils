@@ -12,7 +12,7 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License. */
 
-package org.nognog.gdx.actor;
+package org.nognog.gdx.ui.button;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
@@ -49,47 +49,60 @@ public class SimpleSwitch extends Switch {
 		texturePixmap.dispose();
 		return result;
 	}
-
+	
 	/**
 	 * @param initValue
 	 * @param width
 	 * @param height
 	 */
-	public SimpleSwitch(boolean initValue, float width, float height) {
-		this(initValue, width, height, null);
+	public SimpleSwitch(boolean initValue, float width, float height){
+		this(initValue, width, height, new BitmapFont());
 	}
 
 	/**
 	 * @param initValue
 	 * @param width
 	 * @param height
+	 * @param font
+	 */
+	public SimpleSwitch(boolean initValue, float width, float height, BitmapFont font) {
+		this(initValue, width, height, font, null);
+	}
+
+	/**
+	 * @param initValue
+	 * @param width
+	 * @param height
+	 * @param font
 	 * @param listener
 	 */
-	public SimpleSwitch(boolean initValue, float width, float height, SwitchListener listener) {
-		this(initValue, width, height, listener, defaultOnTexture, defaultOffTexture);
+	public SimpleSwitch(boolean initValue, float width, float height, BitmapFont font, SwitchListener listener) {
+		this(initValue, width, height, font, listener, defaultOnTexture, defaultOffTexture);
 	}
 
 	/**
 	 * @param initValue
 	 * @param width
 	 * @param height
+	 * @param font 
 	 * @param listener
 	 * @param onTextureColor
 	 * @param offTextureColor
 	 */
-	public SimpleSwitch(boolean initValue, float width, float height, SwitchListener listener, Color onTextureColor, Color offTextureColor) {
-		this(initValue, width, height, listener, createSimpleTexture(onTextureColor), createSimpleTexture(offTextureColor));
+	public SimpleSwitch(boolean initValue, float width, float height, BitmapFont font, SwitchListener listener, Color onTextureColor, Color offTextureColor) {
+		this(initValue, width, height, font, listener, createSimpleTexture(onTextureColor), createSimpleTexture(offTextureColor));
 	}
 
 	/**
 	 * @param initValue
 	 * @param width
 	 * @param height
+	 * @param font
 	 * @param listener
 	 * @param onTexture
 	 * @param offTexture
 	 */
-	public SimpleSwitch(boolean initValue, float width, float height, SwitchListener listener, Texture onTexture, Texture offTexture) {
+	public SimpleSwitch(boolean initValue, float width, float height, BitmapFont font, SwitchListener listener, Texture onTexture, Texture offTexture) {
 		super(initValue, listener);
 		this.onImage = new Image(onTexture);
 		this.onImage.addListener(new ActorGestureListener() {
@@ -128,9 +141,9 @@ public class SimpleSwitch extends Switch {
 
 			}
 		});
-		this.onLabel = new Label("on", new LabelStyle(new BitmapFont(), Color.WHITE)); //$NON-NLS-1$
+		this.onLabel = new Label("on", new LabelStyle(font, Color.WHITE)); //$NON-NLS-1$
 		this.onLabel.setTouchable(Touchable.disabled);
-		this.offLabel = new Label("off", new LabelStyle(new BitmapFont(), Color.WHITE)); //$NON-NLS-1$
+		this.offLabel = new Label("off", new LabelStyle(font, Color.WHITE)); //$NON-NLS-1$
 		this.offLabel.setTouchable(Touchable.disabled);
 		this.setSize(width, height);
 		this.addActor(this.onImage);
@@ -204,6 +217,42 @@ public class SimpleSwitch extends Switch {
 	 */
 	public void setOffText(String newText) {
 		this.offLabel.setText(newText);
+	}
+
+	/**
+	 * @param newScale
+	 */
+	public void setLabelScale(float newScale) {
+		this.onLabel.setFontScale(newScale);
+		this.offLabel.setFontScale(newScale);
+	}
+
+	/**
+	 * @param newScale
+	 */
+	public void setOnLabelScale(float newScale) {
+		this.onLabel.setFontScale(newScale);
+	}
+
+	/**
+	 * @param newScale
+	 */
+	public void setOffLabelScale(float newScale) {
+		this.offLabel.setFontScale(newScale);
+	}
+
+	/**
+	 * @return the scale of onLabel
+	 */
+	public float getOnLabelScale() {
+		return this.onLabel.getFontScaleX();
+	}
+
+	/**
+	 * @return the scale of offLabel
+	 */
+	public float getOffLabelScale() {
+		return this.offLabel.getFontScaleX();
 	}
 
 	protected Image getOnImage() {

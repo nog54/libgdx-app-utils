@@ -12,7 +12,7 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License. */
 
-package org.nognog.gdx.actor;
+package org.nognog.gdx.ui.button;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
@@ -50,49 +50,57 @@ public class SimpleButton extends Button {
 	}
 
 	/**
-	 * @param initValue
 	 * @param width
 	 * @param height
 	 */
 	public SimpleButton(float width, float height) {
-		this(width, height, null);
+		this(width, height, new BitmapFont());
 	}
 
 	/**
-	 * @param initValue
 	 * @param width
 	 * @param height
+	 * @param font 
+	 */
+	public SimpleButton(float width, float height, BitmapFont font) {
+		this(width, height, font, null);
+	}
+
+	/**
+	 * @param width
+	 * @param height
+	 * @param font
 	 * @param listener
 	 */
-	public SimpleButton(float width, float height, ButtonListener listener) {
-		this(width, height, listener, defaultUpTexture, defaultDownTexture);
+	public SimpleButton(float width, float height, BitmapFont font, ButtonListener listener) {
+		this(width, height, font, listener, defaultUpTexture, defaultDownTexture);
 	}
 
 	/**
-	 * @param initValue
 	 * @param width
 	 * @param height
+	 * @param font 
 	 * @param listener
 	 * @param upTextureColor
 	 * @param downTextureColor
 	 */
-	public SimpleButton(float width, float height, ButtonListener listener, Color upTextureColor, Color downTextureColor) {
-		this(width, height, listener, createSimpleTexture(upTextureColor), createSimpleTexture(downTextureColor));
+	public SimpleButton(float width, float height, BitmapFont font, ButtonListener listener, Color upTextureColor, Color downTextureColor) {
+		this(width, height, font, listener, createSimpleTexture(upTextureColor), createSimpleTexture(downTextureColor));
 	}
 
 	/**
-	 * @param initValue
 	 * @param width
 	 * @param height
+	 * @param font 
 	 * @param listener
 	 * @param upTexture
 	 * @param downTexture
 	 */
-	public SimpleButton(float width, float height, ButtonListener listener, Texture upTexture, Texture downTexture) {
+	public SimpleButton(float width, float height, BitmapFont font, ButtonListener listener, Texture upTexture, Texture downTexture) {
 		super(listener);
 		this.upImage = new Image(upTexture);
 		this.upImage.addListener(new ActorGestureListener() {
-			
+
 			@Override
 			public void touchDown(InputEvent event, float x, float y, int pointer, int button) {
 				SimpleButton.this.showDownImage();
@@ -107,7 +115,7 @@ public class SimpleButton extends Button {
 					SimpleButton.this.showUpImage();
 				}
 			}
-			
+
 			@Override
 			public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
 				if (SimpleButton.this.hit(x, y, true) == SimpleButton.this.getDownImage()) {
@@ -117,7 +125,7 @@ public class SimpleButton extends Button {
 			}
 		});
 		this.downImage = new Image(downTexture);
-		this.label = new Label("button", new LabelStyle(new BitmapFont(), Color.WHITE)); //$NON-NLS-1$
+		this.label = new Label("button", new LabelStyle(font, Color.WHITE)); //$NON-NLS-1$
 		this.label.setTouchable(Touchable.disabled);
 		this.setSize(width, height);
 		this.addActor(this.upImage);
@@ -171,6 +179,20 @@ public class SimpleButton extends Button {
 	 */
 	public void setText(String newText) {
 		this.label.setText(newText);
+	}
+
+	/**
+	 * @param newScale
+	 */
+	public void setLabelScale(float newScale) {
+		this.label.setFontScale(newScale);
+	}
+
+	/**
+	 * @return the scale of the label
+	 */
+	public float getLabelScale() {
+		return this.label.getFontScaleX();
 	}
 
 	protected Image getUpImage() {

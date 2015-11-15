@@ -19,6 +19,7 @@ import org.nognog.gdx.activity.ApplicationActivity;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 
 /**
  * @author goshi 2015/09/18
@@ -51,5 +52,10 @@ public abstract class ActivityBasedApplication extends Game {
 		}
 		super.setScreen(screen);
 	}
+	
+	/**
+	 * @return skin
+	 */
+	public abstract Skin getSkin();
 
 }

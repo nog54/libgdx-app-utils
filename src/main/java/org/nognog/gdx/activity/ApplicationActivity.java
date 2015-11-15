@@ -18,6 +18,7 @@ import org.nognog.gdx.ActivityBasedApplication;
 
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 
 /**
  * @author goshi 2015/09/18
@@ -36,10 +37,14 @@ public abstract class ApplicationActivity implements Screen {
 	 * @param application
 	 */
 	public void setApplication(ActivityBasedApplication application) {
+		if (this.application == application) {
+			return;
+		}
 		this.application = application;
+		this.initWidgets(this.application.getSkin());
 	}
-	
-	protected ActivityBasedApplication getApplication(){
+
+	protected ActivityBasedApplication getApplication() {
 		return this.application;
 	}
 
@@ -60,4 +65,6 @@ public abstract class ApplicationActivity implements Screen {
 		}
 		return this.application.getActivity() == this;
 	}
+
+	protected abstract void initWidgets(Skin applicationSkin);
 }

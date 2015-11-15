@@ -12,16 +12,19 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License. */
 
-package org.nognog.gdx.actor;
+package org.nognog.gdx.ui.button;
 
 /**
- * @author goshi 2015/11/13
+ * @author goshi 2015/09/17
  */
-public interface ButtonListener {
+public interface SwitchListener {
+	/**
+	 * be executed when switch is changed to "on" from "off"
+	 */
+	public void onFromOff();
 
 	/**
-	 * It is called when button is pressed
+	 * be executed when switch is changed to "off" from "on"
 	 */
-	public void press();
-
+	public void offFromOn();
 }
