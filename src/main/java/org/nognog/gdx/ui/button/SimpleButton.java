@@ -127,6 +127,7 @@ public class SimpleButton extends Button {
 		this.downImage = new Image(downTexture);
 		this.label = new Label("button", new LabelStyle(font, Color.WHITE)); //$NON-NLS-1$
 		this.label.setTouchable(Touchable.disabled);
+		this.label.setAlignment(Align.center);
 		this.setSize(width, height);
 		this.addActor(this.upImage);
 		this.addActor(this.downImage);

@@ -143,8 +143,10 @@ public class SimpleSwitch extends Switch {
 		});
 		this.onLabel = new Label("on", new LabelStyle(font, Color.WHITE)); //$NON-NLS-1$
 		this.onLabel.setTouchable(Touchable.disabled);
+		this.onLabel.setAlignment(Align.center);
 		this.offLabel = new Label("off", new LabelStyle(font, Color.WHITE)); //$NON-NLS-1$
 		this.offLabel.setTouchable(Touchable.disabled);
+		this.offLabel.setAlignment(Align.center);
 		this.setSize(width, height);
 		this.addActor(this.onImage);
 		this.addActor(this.onLabel);
