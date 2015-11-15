@@ -17,7 +17,10 @@ sourceSets.test.resources.srcDirs = ["src/test/resources/"]
 
 eclipse.project { name = "libgdx-app-utils" }
 
-ext{ gdxVersion = '1.7.0' }
+ext{
+	gdxVersion = '1.7.0'
+	libgdxUtilsVersion = '0.13.1'
+}
 
 buildscript {
 	repositories {
@@ -40,7 +43,8 @@ repositories {
 
 dependencies {
 	compile "com.badlogicgames.gdx:gdx:$gdxVersion"
-	//compile "net.dermetfan.libgdx-utils:libgdx-utils:0.13.1"
+	compile "net.dermetfan.libgdx-utils:libgdx-utils:$libgdxUtilsVersion"
+	
 	testCompile "junit:junit:+"
 	testCompile "org.exparity:hamcrest-date:1.0.1"
 	testCompile "com.googlecode.jmockit:jmockit:1.4"
