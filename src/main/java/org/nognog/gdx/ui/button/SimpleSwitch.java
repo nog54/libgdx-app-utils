@@ -49,13 +49,13 @@ public class SimpleSwitch extends Switch {
 		texturePixmap.dispose();
 		return result;
 	}
-	
+
 	/**
 	 * @param initValue
 	 * @param width
 	 * @param height
 	 */
-	public SimpleSwitch(boolean initValue, float width, float height){
+	public SimpleSwitch(boolean initValue, float width, float height) {
 		this(initValue, width, height, new BitmapFont());
 	}
 
@@ -84,7 +84,7 @@ public class SimpleSwitch extends Switch {
 	 * @param initValue
 	 * @param width
 	 * @param height
-	 * @param font 
+	 * @param font
 	 * @param listener
 	 * @param onTextureColor
 	 * @param offTextureColor
@@ -255,6 +255,34 @@ public class SimpleSwitch extends Switch {
 	 */
 	public float getOffLabelScale() {
 		return this.offLabel.getFontScaleX();
+	}
+
+	/**
+	 * @param color
+	 */
+	public void setOnLabelColor(Color color) {
+		this.onLabel.setColor(color);
+	}
+
+	/**
+	 * @return a color of the onLabel
+	 */
+	public Color getOnLabelColor() {
+		return this.onLabel.getColor();
+	}
+
+	/**
+	 * @param color
+	 */
+	public void setOffLabelColor(Color color) {
+		this.offLabel.setColor(color);
+	}
+
+	/**
+	 * @return a color of the offLabel
+	 */
+	public Color getOffLabelColor() {
+		return this.offLabel.getColor();
 	}
 
 	protected Image getOnImage() {

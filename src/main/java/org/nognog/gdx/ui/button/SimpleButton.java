@@ -60,7 +60,7 @@ public class SimpleButton extends Button {
 	/**
 	 * @param width
 	 * @param height
-	 * @param font 
+	 * @param font
 	 */
 	public SimpleButton(float width, float height, BitmapFont font) {
 		this(width, height, font, null);
@@ -79,7 +79,7 @@ public class SimpleButton extends Button {
 	/**
 	 * @param width
 	 * @param height
-	 * @param font 
+	 * @param font
 	 * @param listener
 	 * @param upTextureColor
 	 * @param downTextureColor
@@ -91,7 +91,7 @@ public class SimpleButton extends Button {
 	/**
 	 * @param width
 	 * @param height
-	 * @param font 
+	 * @param font
 	 * @param listener
 	 * @param upTexture
 	 * @param downTexture
@@ -194,6 +194,20 @@ public class SimpleButton extends Button {
 	 */
 	public float getLabelScale() {
 		return this.label.getFontScaleX();
+	}
+
+	/**
+	 * @param color
+	 */
+	public void setLabelColor(Color color) {
+		this.label.setColor(color);
+	}
+
+	/**
+	 * @return a color of the label
+	 */
+	public Color getLabelColor() {
+		return this.label.getColor();
 	}
 
 	protected Image getUpImage() {
