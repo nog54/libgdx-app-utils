@@ -153,22 +153,7 @@ public class SimpleButton extends Button {
 	}
 
 	/**
-	 * @return the onLabel
-	 */
-	public String getOnText() {
-		return this.label.getText().toString();
-	}
-
-	/**
-	 * @param newText
-	 *            the newText to set
-	 */
-	public void setOnText(String newText) {
-		this.label.setText(newText);
-	}
-
-	/**
-	 * @return the offLabel
+	 * @return a text of the label
 	 */
 	public String getText() {
 		return this.label.getText().toString();
