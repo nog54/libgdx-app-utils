@@ -43,13 +43,13 @@ public class ColorUtils {
 	// use clear flat colors
 	public static final Color clearBlack = toClearColor(Color.BLACK);
 
-	private static Color toSoftClearColor(Color baseColor) {
+	public static Color toSoftClearColor(Color baseColor) {
 		final Color result = new Color(baseColor);
 		result.a = softClearA;
 		return result;
 	}
 
-	private static Color toClearColor(Color baseColor) {
+	public static Color toClearColor(Color baseColor) {
 		final Color result = new Color(baseColor);
 		result.a = clearA;
 		return result;
