@@ -12,9 +12,7 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License. */
 
-package org.nognog.gdx;
-
-import org.nognog.gdx.activity.ApplicationActivity;
+package org.nognog.gdx.activity;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;

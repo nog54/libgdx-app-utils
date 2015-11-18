@@ -14,8 +14,6 @@
 
 package org.nognog.gdx.activity;
 
-import org.nognog.gdx.ActivityBasedApplication;
-
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
