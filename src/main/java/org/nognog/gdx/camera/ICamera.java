@@ -17,7 +17,7 @@ package org.nognog.gdx.camera;
 /**
  * @author goshi 2015/06/09
  */
-public interface Camera {
+public interface ICamera {
 
 	/**
 	 * @return camera position x

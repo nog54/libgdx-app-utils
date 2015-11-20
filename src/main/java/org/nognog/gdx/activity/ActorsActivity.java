@@ -76,7 +76,7 @@ public abstract class ActorsActivity extends ApplicationActivity {
 	/**
 	 * @return stage
 	 */
-	protected Stage getStage() {
+	public Stage getStage() {
 		return this.stage;
 	}
 

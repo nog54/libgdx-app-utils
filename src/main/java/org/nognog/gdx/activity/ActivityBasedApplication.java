@@ -14,6 +14,8 @@
 
 package org.nognog.gdx.activity;
 
+import org.nognog.gdx.activity.transition.Transition;
+
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
@@ -24,12 +26,33 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
  */
 public abstract class ActivityBasedApplication extends Game {
 	private ApplicationActivity activity;
+	private Transition transition;
 
 	/**
 	 * @return the activity
 	 */
 	public ApplicationActivity getActivity() {
 		return this.activity;
+	}
+
+	/**
+	 * @param newActivity
+	 * @param usedTransition
+	 */
+	public void performTransition(ApplicationActivity newActivity, Transition usedTransition) {
+		if (this.transition != null) {
+			return;
+		}
+		try {
+			usedTransition.setFromActivity(this.activity);
+			usedTransition.setToActivity(newActivity);
+			usedTransition.setApplication(this);
+			this.transition = usedTransition;
+		} catch (Exception e) {
+			e.printStackTrace();
+			this.setActivity(newActivity);
+			return;
+		}
 	}
 
 	/**
@@ -40,17 +63,56 @@ public abstract class ActivityBasedApplication extends Game {
 		this.activity = activity;
 		this.activity.setApplication(this);
 		this.setScreen(activity);
-		Gdx.input.setInputProcessor(activity.getInputProcessor());
+		this.enableInput();
 	}
-	
+
+	/**
+	 * enable input
+	 */
+	public void enableInput() {
+		if (this.activity != null) {
+			Gdx.input.setInputProcessor(this.activity.getInputProcessor());
+		}
+	}
+
+	/**
+	 * disable input
+	 */
+	@SuppressWarnings("static-method")
+	public void disableInput() {
+		Gdx.input.setInputProcessor(null);
+	}
+
+	/**
+	 * @return true if enable input
+	 */
+	@SuppressWarnings("static-method")
+	public boolean isEnableInput() {
+		return Gdx.input.getInputProcessor() != null;
+	}
+
 	@Override
 	public void setScreen(Screen screen) {
-		if(!(screen instanceof ApplicationActivity)){
+		if (!(screen instanceof ApplicationActivity)) {
 			throw new RuntimeException("screen must extend ApplicationActivity"); //$NON-NLS-1$
 		}
 		super.setScreen(screen);
 	}
-	
+
+	@Override
+	public void render() {
+		if (this.screen != null) {
+			final float deltaTime = Gdx.graphics.getDeltaTime();
+			if (this.transition != null) {
+				final boolean finishedTransition = this.transition.proceed(deltaTime);
+				if (finishedTransition) {
+					this.transition = null;
+				}
+			}
+			this.screen.render(deltaTime);
+		}
+	}
+
 	/**
 	 * @return skin
 	 */

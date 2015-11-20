@@ -14,7 +14,7 @@
 
 package org.nognog.gdx.ui.dialog;
 
-import org.nognog.gdx.camera.Camera;
+import org.nognog.gdx.camera.ICamera;
 
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 
@@ -28,7 +28,7 @@ public abstract class CameraFitSimpleYesNoDialog extends CameraFitSimpleDialog {
 	 * @param font
 	 * @param text
 	 */
-	public CameraFitSimpleYesNoDialog(Camera camera, BitmapFont font, String text) {
+	public CameraFitSimpleYesNoDialog(ICamera camera, BitmapFont font, String text) {
 		super(camera, font);
 		this.setText(text);
 		this.setLeftButtonText("Yes"); //$NON-NLS-1$

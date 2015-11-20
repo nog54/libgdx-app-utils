@@ -20,7 +20,7 @@ import net.dermetfan.gdx.scenes.scene2d.ui.FileChooser.Listener;
 import net.dermetfan.gdx.scenes.scene2d.ui.ListFileChooser;
 import net.dermetfan.gdx.scenes.scene2d.ui.ListFileChooser.Style;
 
-import org.nognog.gdx.camera.Camera;
+import org.nognog.gdx.camera.ICamera;
 import org.nognog.gdx.camera.CameraObserver;
 import org.nognog.gdx.ui.ColorUtils;
 import org.nognog.gdx.ui.UiUtils;
@@ -49,7 +49,7 @@ public class CameraFitFileChooser extends Group implements CameraObserver {
 	 * @param font
 	 * @param listener
 	 */
-	public CameraFitFileChooser(Camera camera, BitmapFont font, Listener listener) {
+	public CameraFitFileChooser(ICamera camera, BitmapFont font, Listener listener) {
 		final float width = camera.getViewportWidth();
 		final float height = camera.getViewportHeight();
 		this.setSize(width, height);
@@ -104,7 +104,7 @@ public class CameraFitFileChooser extends Group implements CameraObserver {
 	}
 
 	@Override
-	public void updateCamera(Camera camera) {
+	public void updateCamera(ICamera camera) {
 		final float currentCameraZoom = camera.getZoom();
 		final float newX = camera.getX() - currentCameraZoom * (camera.getViewportWidth() / 2);
 		final float newY = camera.getY() + currentCameraZoom * (camera.getViewportHeight() / 2 - this.getHeight());

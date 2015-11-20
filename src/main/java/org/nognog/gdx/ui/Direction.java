@@ -12,14 +12,28 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License. */
 
-package org.nognog.gdx.camera;
+package org.nognog.gdx.ui;
 
 /**
- * @author goshi 2015/01/23
+ * @author goshi 2015/01/31
  */
-public interface CameraObserver {
-	/**
-	 * @param camera
-	 */
-	void updateCamera(ICamera camera);
+@SuppressWarnings("javadoc")
+public enum Direction {
+	UP, DOWN, LEFT, RIGHT, ;
+
+	public static Direction getCounterDirectionOf(Direction direction) {
+		if (direction == UP) {
+			return DOWN;
+		}
+		if (direction == DOWN) {
+			return UP;
+		}
+		if (direction == LEFT) {
+			return RIGHT;
+		}
+		if (direction == RIGHT) {
+			return LEFT;
+		}
+		return null;
+	}
 }

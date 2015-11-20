@@ -19,7 +19,7 @@ import java.util.ArrayList;
 /**
  * @author goshi 2015/06/09
  */
-public abstract class ObservableCamera implements Camera {
+public abstract class ObservableCamera implements ICamera {
 
 	private final ArrayList<CameraObserver> cameraObservers = new ArrayList<>();
 

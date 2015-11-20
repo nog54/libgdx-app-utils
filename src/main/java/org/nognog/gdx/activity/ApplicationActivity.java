@@ -14,6 +14,8 @@
 
 package org.nognog.gdx.activity;
 
+import org.nognog.gdx.activity.transition.Transition;
+
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -29,6 +31,14 @@ public abstract class ApplicationActivity implements Screen {
 	 */
 	public void moveTo(ApplicationActivity activity) {
 		this.application.setActivity(activity);
+	}
+
+	/**
+	 * @param activity
+	 * @param transition
+	 */
+	public void moveTo(ApplicationActivity activity, Transition transition) {
+		this.application.performTransition(activity, transition);
 	}
 
 	/**

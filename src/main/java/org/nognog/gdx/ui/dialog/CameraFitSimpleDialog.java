@@ -14,7 +14,7 @@
 
 package org.nognog.gdx.ui.dialog;
 
-import org.nognog.gdx.camera.Camera;
+import org.nognog.gdx.camera.ICamera;
 import org.nognog.gdx.camera.CameraObserver;
 import org.nognog.gdx.ui.ColorUtils;
 import org.nognog.gdx.ui.UiUtils;
@@ -35,7 +35,7 @@ public class CameraFitSimpleDialog extends SimpleDialog implements CameraObserve
 	 * @param camera
 	 * @param font
 	 */
-	public CameraFitSimpleDialog(Camera camera, BitmapFont font) {
+	public CameraFitSimpleDialog(ICamera camera, BitmapFont font) {
 		this(camera.getViewportWidth(), camera.getViewportHeight(), "", "", "", font, createButtonStyle(font)); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 	}
 
@@ -54,7 +54,7 @@ public class CameraFitSimpleDialog extends SimpleDialog implements CameraObserve
 	}
 
 	@Override
-	public void updateCamera(Camera camera) {
+	public void updateCamera(ICamera camera) {
 		final float currentCameraZoom = camera.getZoom();
 		final float newX = camera.getX() - currentCameraZoom * (camera.getViewportWidth() / 2);
 		final float newY = camera.getY() + currentCameraZoom * (camera.getViewportHeight() / 2 - this.getHeight());
