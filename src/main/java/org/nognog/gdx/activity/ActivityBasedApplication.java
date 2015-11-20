@@ -44,6 +44,7 @@ public abstract class ActivityBasedApplication extends Game {
 			return;
 		}
 		try {
+			newActivity.setApplication(this);
 			usedTransition.setFromActivity(this.activity);
 			usedTransition.setToActivity(newActivity);
 			usedTransition.setApplication(this);
