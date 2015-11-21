@@ -24,6 +24,7 @@ import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.ActorGestureListener;
 import com.badlogic.gdx.utils.Align;
 
@@ -64,20 +65,10 @@ public class SimpleSwitch extends Switch {
 	 * @param width
 	 * @param height
 	 * @param font
-	 */
-	public SimpleSwitch(boolean initValue, float width, float height, BitmapFont font) {
-		this(initValue, width, height, font, null);
-	}
-
-	/**
-	 * @param initValue
-	 * @param width
-	 * @param height
-	 * @param font
 	 * @param listener
 	 */
-	public SimpleSwitch(boolean initValue, float width, float height, BitmapFont font, SwitchListener listener) {
-		this(initValue, width, height, font, listener, defaultOnTexture, defaultOffTexture);
+	public SimpleSwitch(boolean initValue, float width, float height, BitmapFont font) {
+		this(initValue, width, height, font, defaultOnTexture, defaultOffTexture);
 	}
 
 	/**
@@ -89,8 +80,31 @@ public class SimpleSwitch extends Switch {
 	 * @param onTextureColor
 	 * @param offTextureColor
 	 */
-	public SimpleSwitch(boolean initValue, float width, float height, BitmapFont font, SwitchListener listener, Color onTextureColor, Color offTextureColor) {
-		this(initValue, width, height, font, listener, createSimpleTexture(onTextureColor), createSimpleTexture(offTextureColor));
+	public SimpleSwitch(boolean initValue, float width, float height, BitmapFont font, Color onTextureColor, Color offTextureColor) {
+		this(initValue, width, height, font, createSimpleTexture(onTextureColor), createSimpleTexture(offTextureColor));
+	}
+
+	/**
+	 * @param initValue
+	 * @param width
+	 * @param height
+	 * @param skin
+	 */
+	public SimpleSwitch(boolean initValue, float width, float height, Skin skin) {
+		this(initValue, width, height, skin, "default", "onTexture", "offTexture"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+	}
+
+	/**
+	 * @param initValue
+	 * @param width
+	 * @param height
+	 * @param skin
+	 * @param fontName 
+	 * @param onTextureName 
+	 * @param offTextureName 
+	 */
+	public SimpleSwitch(boolean initValue, float width, float height, Skin skin, String fontName, String onTextureName, String offTextureName) {
+		this(initValue, width, height, skin.get(fontName, BitmapFont.class), skin.get(onTextureName, Texture.class), skin.get(offTextureName, Texture.class));
 	}
 
 	/**
@@ -102,8 +116,8 @@ public class SimpleSwitch extends Switch {
 	 * @param onTexture
 	 * @param offTexture
 	 */
-	public SimpleSwitch(boolean initValue, float width, float height, BitmapFont font, SwitchListener listener, Texture onTexture, Texture offTexture) {
-		super(initValue, listener);
+	public SimpleSwitch(boolean initValue, float width, float height, BitmapFont font, Texture onTexture, Texture offTexture) {
+		super(initValue);
 		this.onImage = new Image(onTexture);
 		this.onImage.addListener(new ActorGestureListener() {
 			@Override

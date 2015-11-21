@@ -24,6 +24,7 @@ import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.ActorGestureListener;
 import com.badlogic.gdx.utils.Align;
 
@@ -63,41 +64,52 @@ public class SimpleButton extends Button {
 	 * @param font
 	 */
 	public SimpleButton(float width, float height, BitmapFont font) {
-		this(width, height, font, null);
+		this(width, height, font, defaultDownTexture, defaultUpTexture);
 	}
 
 	/**
 	 * @param width
 	 * @param height
 	 * @param font
-	 * @param listener
-	 */
-	public SimpleButton(float width, float height, BitmapFont font, ButtonListener listener) {
-		this(width, height, font, listener, defaultUpTexture, defaultDownTexture);
-	}
-
-	/**
-	 * @param width
-	 * @param height
-	 * @param font
-	 * @param listener
 	 * @param upTextureColor
 	 * @param downTextureColor
 	 */
-	public SimpleButton(float width, float height, BitmapFont font, ButtonListener listener, Color upTextureColor, Color downTextureColor) {
-		this(width, height, font, listener, createSimpleTexture(upTextureColor), createSimpleTexture(downTextureColor));
+	public SimpleButton(float width, float height, BitmapFont font, Color upTextureColor, Color downTextureColor) {
+		this(width, height, font, createSimpleTexture(upTextureColor), createSimpleTexture(downTextureColor));
+	}
+
+	/**
+	 * @param width
+	 * @param height
+	 * @param skin
+	 * @param fontName
+	 * @param upTextureName
+	 * @param downTextureName
+	 */
+	public SimpleButton(float width, float height, Skin skin) {
+		this(width, height, skin, "default", "upTexture", "downTexture"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+	}
+
+	/**
+	 * @param width
+	 * @param height
+	 * @param skin
+	 * @param fontName
+	 * @param upTextureName
+	 * @param downTextureName
+	 */
+	public SimpleButton(float width, float height, Skin skin, String fontName, String upTextureName, String downTextureName) {
+		this(width, height, skin.get(fontName, BitmapFont.class), skin.get(upTextureName, Texture.class), skin.get(downTextureName, Texture.class));
 	}
 
 	/**
 	 * @param width
 	 * @param height
 	 * @param font
-	 * @param listener
 	 * @param upTexture
 	 * @param downTexture
 	 */
-	public SimpleButton(float width, float height, BitmapFont font, ButtonListener listener, Texture upTexture, Texture downTexture) {
-		super(listener);
+	public SimpleButton(float width, float height, BitmapFont font, Texture upTexture, Texture downTexture) {
 		this.upImage = new Image(upTexture);
 		this.upImage.addListener(new ActorGestureListener() {
 
