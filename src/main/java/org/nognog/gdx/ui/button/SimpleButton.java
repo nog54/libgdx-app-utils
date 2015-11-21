@@ -82,9 +82,6 @@ public class SimpleButton extends Button {
 	 * @param width
 	 * @param height
 	 * @param skin
-	 * @param fontName
-	 * @param upTextureName
-	 * @param downTextureName
 	 */
 	public SimpleButton(float width, float height, Skin skin) {
 		this(width, height, skin, "default", "upTexture", "downTexture"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$

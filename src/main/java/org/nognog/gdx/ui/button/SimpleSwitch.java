@@ -65,7 +65,6 @@ public class SimpleSwitch extends Switch {
 	 * @param width
 	 * @param height
 	 * @param font
-	 * @param listener
 	 */
 	public SimpleSwitch(boolean initValue, float width, float height, BitmapFont font) {
 		this(initValue, width, height, font, defaultOnTexture, defaultOffTexture);
@@ -76,7 +75,6 @@ public class SimpleSwitch extends Switch {
 	 * @param width
 	 * @param height
 	 * @param font
-	 * @param listener
 	 * @param onTextureColor
 	 * @param offTextureColor
 	 */
@@ -112,7 +110,6 @@ public class SimpleSwitch extends Switch {
 	 * @param width
 	 * @param height
 	 * @param font
-	 * @param listener
 	 * @param onTexture
 	 * @param offTexture
 	 */
