@@ -14,12 +14,12 @@
 
 package org.nognog.gdx.ui.button;
 
-import com.badlogic.gdx.scenes.scene2d.Group;
+import com.badlogic.gdx.scenes.scene2d.ui.WidgetGroup;
 
 /**
  * @author goshi 2015/09/18
  */
-public abstract class Switch extends Group {
+public abstract class Switch extends WidgetGroup {
 
 	private boolean on;
 	private SwitchListener listener;

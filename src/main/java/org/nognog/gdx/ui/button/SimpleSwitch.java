@@ -20,6 +20,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
@@ -34,6 +35,8 @@ import com.badlogic.gdx.utils.Align;
  */
 public class SimpleSwitch extends Switch {
 
+	private Group onActors;
+	private Group offActors;
 	private final Image onImage;
 	private final Image offImage;
 	private Label onLabel;
@@ -41,7 +44,32 @@ public class SimpleSwitch extends Switch {
 
 	private static final Texture defaultOnTexture = UiUtils.createSimpleTexture(new Color(0.2f, 1f, 0.2f, 1));
 	private static final Texture defaultOffTexture = UiUtils.createSimpleTexture(new Color(0.6f, 1f, 0.6f, 1));
-	
+
+	/**
+	 * @param initValue
+	 */
+	public SimpleSwitch(boolean initValue) {
+		this(initValue, 0, 0);
+	}
+
+	/**
+	 * @param initValue
+	 * @param font
+	 */
+	public SimpleSwitch(boolean initValue, BitmapFont font) {
+		this(initValue, 0, 0, font);
+	}
+
+	/**
+	 * @param initValue
+	 * @param font
+	 * @param upTextureColor
+	 * @param downTextureColor
+	 */
+	public SimpleSwitch(boolean initValue, BitmapFont font, Color upTextureColor, Color downTextureColor) {
+		this(initValue, 0, 0, font, UiUtils.createSimpleTexture(upTextureColor), UiUtils.createSimpleTexture(downTextureColor));
+	}
+
 	/**
 	 * @param initValue
 	 * @param width
@@ -88,9 +116,9 @@ public class SimpleSwitch extends Switch {
 	 * @param width
 	 * @param height
 	 * @param skin
-	 * @param fontName 
-	 * @param onTextureName 
-	 * @param offTextureName 
+	 * @param fontName
+	 * @param onTextureName
+	 * @param offTextureName
 	 */
 	public SimpleSwitch(boolean initValue, float width, float height, Skin skin, String fontName, String onTextureName, String offTextureName) {
 		this(initValue, width, height, skin.get(fontName, BitmapFont.class), skin.get(onTextureName, Texture.class), skin.get(offTextureName, Texture.class));
@@ -146,14 +174,22 @@ public class SimpleSwitch extends Switch {
 		this.onLabel = new Label("on", new LabelStyle(font, Color.WHITE)); //$NON-NLS-1$
 		this.onLabel.setTouchable(Touchable.disabled);
 		this.onLabel.setAlignment(Align.center);
+		this.onLabel.setVisible(width != 0 && height != 0);
 		this.offLabel = new Label("off", new LabelStyle(font, Color.WHITE)); //$NON-NLS-1$
 		this.offLabel.setTouchable(Touchable.disabled);
 		this.offLabel.setAlignment(Align.center);
+		this.offLabel.setVisible(width != 0 && height != 0);
 		this.setSize(width, height);
-		this.addActor(this.onImage);
-		this.addActor(this.onLabel);
-		this.addActor(this.offImage);
-		this.addActor(this.offLabel);
+		
+		this.onActors = new Group();
+		this.onActors.addActor(this.onImage);
+		this.onActors.addActor(this.onLabel);
+		this.addActor(this.onActors);
+		
+		this.offActors = new Group();
+		this.offActors.addActor(this.offImage);
+		this.offActors.addActor(this.offLabel);
+		this.addActor(this.offActors);
 		if (this.isOn()) {
 			this.showOnActors();
 		} else {
@@ -167,10 +203,8 @@ public class SimpleSwitch extends Switch {
 	}
 
 	protected void showOnActors() {
-		this.offImage.setVisible(false);
-		this.offLabel.setVisible(false);
-		this.onImage.setVisible(true);
-		this.onLabel.setVisible(true);
+		this.offActors.setVisible(false);
+		this.onActors.setVisible(true);
 	}
 
 	@Override
@@ -179,10 +213,8 @@ public class SimpleSwitch extends Switch {
 	}
 
 	protected void showOffActors() {
-		this.onImage.setVisible(false);
-		this.onLabel.setVisible(false);
-		this.offImage.setVisible(true);
-		this.offLabel.setVisible(true);
+		this.onActors.setVisible(false);
+		this.offActors.setVisible(true);
 	}
 
 	@Override
@@ -191,6 +223,33 @@ public class SimpleSwitch extends Switch {
 		this.offImage.setSize(this.getWidth(), this.getHeight());
 		this.onLabel.setPosition(this.getWidth() / 2, this.getHeight() / 2, Align.center);
 		this.offLabel.setPosition(this.getWidth() / 2, this.getHeight() / 2, Align.center);
+		this.onLabel.setVisible(this.getWidth() != 0 && this.getHeight() != 0);
+		this.offLabel.setVisible(this.getWidth() != 0 && this.getHeight() != 0);
+	}
+
+	@Override
+	public float getMinWidth() {
+		return this.getPrefWidth();
+	}
+
+	@Override
+	public float getMinHeight() {
+		return this.getPrefHeight();
+	}
+
+	@Override
+	public float getMaxWidth() {
+		return this.getPrefWidth();
+	}
+
+	@Override
+	public float getMaxHeight() {
+		return this.getPrefHeight();
+	}
+
+	@Override
+	public float getPrefWidth() {
+		return this.getWidth();
 	}
 
 	/**

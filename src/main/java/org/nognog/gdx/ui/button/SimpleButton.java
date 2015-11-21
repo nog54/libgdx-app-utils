@@ -42,6 +42,29 @@ public class SimpleButton extends Button {
 	private static final Texture defaultDownTexture = UiUtils.createSimpleTexture(new Color(0.6f, 0.6f, 1, 1));
 
 	/**
+	 * 
+	 */
+	public SimpleButton() {
+		this(0, 0);
+	}
+
+	/**
+	 * @param font
+	 */
+	public SimpleButton(BitmapFont font) {
+		this(0, 0, font, defaultDownTexture, defaultUpTexture);
+	}
+
+	/**
+	 * @param font
+	 * @param upTextureColor
+	 * @param downTextureColor
+	 */
+	public SimpleButton(BitmapFont font, Color upTextureColor, Color downTextureColor) {
+		this(0, 0, font, UiUtils.createSimpleTexture(upTextureColor), UiUtils.createSimpleTexture(downTextureColor));
+	}
+
+	/**
 	 * @param width
 	 * @param height
 	 */
@@ -128,11 +151,42 @@ public class SimpleButton extends Button {
 		this.label = new Label("button", new LabelStyle(font, Color.WHITE)); //$NON-NLS-1$
 		this.label.setTouchable(Touchable.disabled);
 		this.label.setAlignment(Align.center);
+		this.label.setVisible(width != 0 && height != 0);
 		this.setSize(width, height);
 		this.addActor(this.upImage);
 		this.addActor(this.downImage);
 		this.addActor(this.label);
 		this.showUpImage();
+	}
+	
+	@Override
+	public float getMinWidth() {
+		return this.getPrefWidth();
+	}
+	
+	@Override
+	public float getMinHeight(){
+		return this.getPrefHeight();
+	}
+	
+	@Override
+	public float getMaxWidth() {
+		return this.getPrefWidth();
+	}
+	
+	@Override
+	public float getMaxHeight(){
+		return this.getPrefHeight();
+	}
+
+	@Override
+	public float getPrefWidth() {
+		return this.getWidth();
+	}
+
+	@Override
+	public float getPrefHeight() {
+		return this.getHeight();
 	}
 
 	protected void showUpImage() {
@@ -150,6 +204,7 @@ public class SimpleButton extends Button {
 		this.upImage.setSize(this.getWidth(), this.getHeight());
 		this.downImage.setSize(this.getWidth(), this.getHeight());
 		this.label.setPosition(this.getWidth() / 2, this.getHeight() / 2, Align.center);
+		this.label.setVisible(this.getWidth() != 0 && this.getHeight() != 0);
 	}
 
 	/**
