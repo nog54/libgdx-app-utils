@@ -14,8 +14,9 @@
 
 package org.nognog.gdx.ui.button;
 
+import org.nognog.gdx.ui.UiUtils;
+
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -37,18 +38,8 @@ public class SimpleButton extends Button {
 	private final Image downImage;
 	private Label label;
 
-	private static final Texture defaultUpTexture = createSimpleTexture(new Color(0.2f, 0.2f, 1, 1));
-	private static final Texture defaultDownTexture = createSimpleTexture(new Color(0.6f, 0.6f, 1, 1));
-
-	private static final Texture createSimpleTexture(Color color) {
-		final Pixmap texturePixmap = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
-		texturePixmap.setColor(color);
-		texturePixmap.drawPixel(0, 0);
-
-		final Texture result = new Texture(texturePixmap);
-		texturePixmap.dispose();
-		return result;
-	}
+	private static final Texture defaultUpTexture = UiUtils.createSimpleTexture(new Color(0.2f, 0.2f, 1, 1));
+	private static final Texture defaultDownTexture = UiUtils.createSimpleTexture(new Color(0.6f, 0.6f, 1, 1));
 
 	/**
 	 * @param width
@@ -75,7 +66,7 @@ public class SimpleButton extends Button {
 	 * @param downTextureColor
 	 */
 	public SimpleButton(float width, float height, BitmapFont font, Color upTextureColor, Color downTextureColor) {
-		this(width, height, font, createSimpleTexture(upTextureColor), createSimpleTexture(downTextureColor));
+		this(width, height, font, UiUtils.createSimpleTexture(upTextureColor), UiUtils.createSimpleTexture(downTextureColor));
 	}
 
 	/**

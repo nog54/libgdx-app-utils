@@ -14,8 +14,9 @@
 
 package org.nognog.gdx.ui.button;
 
+import org.nognog.gdx.ui.UiUtils;
+
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -38,19 +39,9 @@ public class SimpleSwitch extends Switch {
 	private Label onLabel;
 	private Label offLabel;
 
-	private static final Texture defaultOnTexture = createSimpleTexture(new Color(0.2f, 1f, 0.2f, 1));
-	private static final Texture defaultOffTexture = createSimpleTexture(new Color(0.6f, 1f, 0.6f, 1));
-
-	private static final Texture createSimpleTexture(Color color) {
-		final Pixmap texturePixmap = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
-		texturePixmap.setColor(color);
-		texturePixmap.drawPixel(0, 0);
-
-		final Texture result = new Texture(texturePixmap);
-		texturePixmap.dispose();
-		return result;
-	}
-
+	private static final Texture defaultOnTexture = UiUtils.createSimpleTexture(new Color(0.2f, 1f, 0.2f, 1));
+	private static final Texture defaultOffTexture = UiUtils.createSimpleTexture(new Color(0.6f, 1f, 0.6f, 1));
+	
 	/**
 	 * @param initValue
 	 * @param width
@@ -79,7 +70,7 @@ public class SimpleSwitch extends Switch {
 	 * @param offTextureColor
 	 */
 	public SimpleSwitch(boolean initValue, float width, float height, BitmapFont font, Color onTextureColor, Color offTextureColor) {
-		this(initValue, width, height, font, createSimpleTexture(onTextureColor), createSimpleTexture(offTextureColor));
+		this(initValue, width, height, font, UiUtils.createSimpleTexture(onTextureColor), UiUtils.createSimpleTexture(offTextureColor));
 	}
 
 	/**
