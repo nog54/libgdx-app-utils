@@ -20,6 +20,7 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.utils.ObjectSet;
 
 /**
  * @author goshi 2015/09/18
@@ -27,6 +28,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 public abstract class ActivityBasedApplication extends Game {
 	private ApplicationActivity activity;
 	private Transition transition;
+
+	private ObjectSet<ApplicationActivity> usedActivities;
 
 	/**
 	 * @return the activity
@@ -62,9 +65,17 @@ public abstract class ActivityBasedApplication extends Game {
 	 */
 	public void setActivity(ApplicationActivity activity) {
 		this.activity = activity;
+		this.addDispositionTargetActivity(activity);
 		this.activity.setApplication(this);
 		this.setScreen(activity);
 		this.enableInput();
+	}
+
+	/**
+	 * @param targetActivity
+	 */
+	public void addDispositionTargetActivity(ApplicationActivity targetActivity) {
+		this.usedActivities.add(targetActivity);
 	}
 
 	/**
@@ -101,6 +112,11 @@ public abstract class ActivityBasedApplication extends Game {
 	}
 
 	@Override
+	public void create() {
+		this.usedActivities = new ObjectSet<>();
+	}
+
+	@Override
 	public void render() {
 		if (this.screen != null) {
 			final float deltaTime = Gdx.graphics.getDeltaTime();
@@ -111,6 +127,15 @@ public abstract class ActivityBasedApplication extends Game {
 				}
 			}
 			this.screen.render(deltaTime);
+		}
+	}
+
+	@Override
+	public void dispose() {
+		synchronized (this.usedActivities) {
+			for (ApplicationActivity usedActivity : this.usedActivities) {
+				usedActivity.dispose();
+			}
 		}
 	}
 
