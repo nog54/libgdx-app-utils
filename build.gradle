@@ -39,12 +39,14 @@ repositories {
 	mavenCentral()
 	maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
 	maven { url "https://oss.sonatype.org/content/repositories/releases/" }
+	mavenLocal()
 }
 
 dependencies {
 	compile "com.badlogicgames.gdx:gdx:$gdxVersion"
+	compile "com.github.nog54:jmatcher-client:+"
 	compile "net.dermetfan.libgdx-utils:libgdx-utils:$libgdxUtilsVersion"
-	
+
 	testCompile "junit:junit:+"
 	testCompile "org.exparity:hamcrest-date:1.0.1"
 	testCompile "com.googlecode.jmockit:jmockit:1.4"
