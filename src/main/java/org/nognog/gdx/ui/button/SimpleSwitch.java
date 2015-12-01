@@ -63,11 +63,11 @@ public class SimpleSwitch extends Switch {
 	/**
 	 * @param initValue
 	 * @param font
-	 * @param upTextureColor
-	 * @param downTextureColor
+	 * @param onTextureColor
+	 * @param offTextureColor
 	 */
-	public SimpleSwitch(boolean initValue, BitmapFont font, Color upTextureColor, Color downTextureColor) {
-		this(initValue, 0, 0, font, UiUtils.createSimpleTexture(upTextureColor), UiUtils.createSimpleTexture(downTextureColor));
+	public SimpleSwitch(boolean initValue, BitmapFont font, Color onTextureColor, Color offTextureColor) {
+		this(initValue, 0, 0, font, UiUtils.createSimpleTexture(onTextureColor), UiUtils.createSimpleTexture(offTextureColor));
 	}
 
 	/**
@@ -137,39 +137,41 @@ public class SimpleSwitch extends Switch {
 		this.onImage = new Image(onTexture);
 		this.onImage.addListener(new ActorGestureListener() {
 			@Override
+			public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+				if (SimpleSwitch.this.hit(x, y, true) == SimpleSwitch.this.getOnImage()) {
+					SimpleSwitch.this.off();
+				}
+			}
+		});
+		this.offImage = new Image(offTexture);
+		this.offImage.addListener(new ActorGestureListener() {
+			@Override
 			public void touchDown(InputEvent event, float x, float y, int pointer, int button) {
-				SimpleSwitch.this.showOffActors();
+				SimpleSwitch.this.showOnActors();
 			}
 
 			@Override
 			public void pan(InputEvent event, float x, float y, float deltaX, float deltaY) {
 				final Actor touchingActor = SimpleSwitch.this.hit(x, y, true);
 				if (touchingActor == SimpleSwitch.this.getOffImage() || touchingActor == SimpleSwitch.this.getOnImage()) {
+					SimpleSwitch.this.showOnActors();
+				} else {
 					SimpleSwitch.this.showOffActors();
-				} else {
-					SimpleSwitch.this.showOnActors();
 				}
 			}
 
 			@Override
 			public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-				if (SimpleSwitch.this.hit(x, y, true) == SimpleSwitch.this.getOffImage()) {
-					SimpleSwitch.this.off();
-				} else {
-					SimpleSwitch.this.showOnActors();
-				}
-
-			}
-		});
-		this.offImage = new Image(offTexture);
-		this.offImage.addListener(new ActorGestureListener() {
-			@Override
-			public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-				if (SimpleSwitch.this.hit(x, y, true) == SimpleSwitch.this.getOffImage()) {
+				if (SimpleSwitch.this.hit(x, y, true) == SimpleSwitch.this.getOnImage()) {
 					SimpleSwitch.this.on();
 				}
-
+				if (SimpleSwitch.this.isOn()) {
+					SimpleSwitch.this.showOnActors();
+				} else {
+					SimpleSwitch.this.showOffActors();
+				}
 			}
+
 		});
 		this.onLabel = new Label("on", new LabelStyle(font, Color.WHITE)); //$NON-NLS-1$
 		this.onLabel.setTouchable(Touchable.disabled);
@@ -180,12 +182,12 @@ public class SimpleSwitch extends Switch {
 		this.offLabel.setAlignment(Align.center);
 		this.offLabel.setVisible(width != 0 && height != 0);
 		this.setSize(width, height);
-		
+
 		this.onActors = new Group();
 		this.onActors.addActor(this.onImage);
 		this.onActors.addActor(this.onLabel);
 		this.addActor(this.onActors);
-		
+
 		this.offActors = new Group();
 		this.offActors.addActor(this.offImage);
 		this.offActors.addActor(this.offLabel);

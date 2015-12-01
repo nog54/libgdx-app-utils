@@ -68,7 +68,9 @@ public abstract class Switch extends WidgetGroup {
 			return;
 		}
 		if (this.listener != null) {
-			this.listener.onFromOff();
+			if (this.listener.onFromOff() == false) {
+				return;
+			}
 		}
 		this.on = true;
 		this.afterOn();
@@ -82,7 +84,9 @@ public abstract class Switch extends WidgetGroup {
 			return;
 		}
 		if (this.listener != null) {
-			this.listener.offFromOn();
+			if (this.listener.offFromOn() == false) {
+				return;
+			}
 		}
 		this.on = false;
 		this.afterOff();
@@ -116,7 +120,8 @@ public abstract class Switch extends WidgetGroup {
 	public void setListener(SwitchListener listener) {
 		this.listener = listener;
 	}
-	
+
 	protected abstract void afterOn();
+
 	protected abstract void afterOff();
 }

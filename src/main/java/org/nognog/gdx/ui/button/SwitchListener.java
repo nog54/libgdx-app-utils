@@ -20,11 +20,15 @@ package org.nognog.gdx.ui.button;
 public interface SwitchListener {
 	/**
 	 * be executed when switch is changed to "on" from "off"
+	 * 
+	 * @return whether make the switch turn off
 	 */
-	public void onFromOff();
+	public boolean onFromOff();
 
 	/**
 	 * be executed when switch is changed to "off" from "on"
+	 * 
+	 * @return whether make the switch turn on
 	 */
-	public void offFromOn();
+	public boolean offFromOn();
 }
