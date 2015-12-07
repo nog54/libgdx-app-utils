@@ -14,7 +14,6 @@
 
 package org.nognog.gdx.jmatcher;
 
-import java.io.Closeable;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -26,50 +25,40 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Net.Protocol;
 import com.badlogic.gdx.net.Socket;
 import com.badlogic.gdx.net.SocketHints;
-import com.badlogic.gdx.utils.GdxRuntimeException;
 
 /**
  * @author goshi 2015/11/27
  */
-public class GdxJMatcherClient implements java.io.Closeable {
+public class GdxJMatcherClient {
 
-	private final String host;
-	private final SocketHints hints;
-	private final int port;
-	private boolean isClosed;
-
-	private Socket socket;
-	private ObjectOutputStream oos;
-	private ObjectInputStream ois;
+	private String host;
+	private int port;
+	private SocketHints hints;
+	private int retryCount;
 
 	private static final int defaultPort = 11600;
+	private static final int defalutRetryCount = 2;
 
 	/**
 	 * @param host
-	 * @throws IOException
-	 *             It's thrown if failed to connect to the server
 	 */
-	public GdxJMatcherClient(String host) throws IOException {
+	public GdxJMatcherClient(String host) {
 		this(host, defaultPort);
 	}
 
 	/**
 	 * @param host
 	 * @param port
-	 * @throws IOException
-	 *             It's thrown if failed to connect to the server
 	 */
-	public GdxJMatcherClient(String host, int port) throws IOException {
+	public GdxJMatcherClient(String host, int port) {
 		this(host, port, new SocketHints());
 	}
 
 	/**
 	 * @param host
 	 * @param hints
-	 * @throws IOException
-	 *             It's thrown if failed to connect to the server
 	 */
-	public GdxJMatcherClient(String host, SocketHints hints) throws IOException {
+	public GdxJMatcherClient(String host, SocketHints hints) {
 		this(host, defaultPort, hints);
 	}
 
@@ -77,52 +66,92 @@ public class GdxJMatcherClient implements java.io.Closeable {
 	 * @param host
 	 * @param port
 	 * @param hints
-	 * @throws IOException
-	 *             It's thrown if failed to connect to the server
 	 */
-	public GdxJMatcherClient(String host, int port, SocketHints hints) throws IOException {
+	public GdxJMatcherClient(String host, int port, SocketHints hints) {
 		this.host = host;
 		this.port = port;
 		this.hints = hints;
-		this.setupSocket();
+		this.retryCount = defalutRetryCount;
 	}
 
-	private void setupSocket() throws IOException {
-		if (this.isClosed) {
-			return;
-		}
-		this.cleanSocket();
-		try {
-			this.socket = Gdx.net.newClientSocket(Protocol.TCP, this.host, this.port, this.hints);
-		} catch (GdxRuntimeException e) {
-			throw new IOException(e);
-		}
-		this.oos = new ObjectOutputStream(this.socket.getOutputStream());
-		this.ois = new ObjectInputStream(this.socket.getInputStream());
+	/**
+	 * @return the host
+	 */
+	public String getHost() {
+		return this.host;
 	}
 
-	private void cleanSocket() {
-		if (this.oos != null) {
-			closeClosable(this.oos);
-			this.oos = null;
-		}
-		if (this.ois != null) {
-			closeClosable(this.ois);
-			this.ois = null;
-		}
-		if (this.socket != null) {
-			this.socket.dispose();
-			this.socket = null;
-		}
+	/**
+	 * @param host
+	 *            the host to set
+	 */
+	public void setHost(String host) {
+		this.host = host;
 	}
 
-	private static void closeClosable(Closeable closable) {
-		try {
-			closable.close();
-		} catch (IOException e) {
-			// Just print
-			e.printStackTrace();
+	/**
+	 * @return the port
+	 */
+	public int getPort() {
+		return this.port;
+	}
+
+	/**
+	 * @param port
+	 *            the port to set
+	 */
+	public void setPort(int port) {
+		this.port = port;
+	}
+
+	/**
+	 * @return the hints
+	 */
+	public SocketHints getHints() {
+		return this.hints;
+	}
+
+	/**
+	 * @param hints
+	 *            the hints to set
+	 */
+	public void setHints(SocketHints hints) {
+		this.hints = hints;
+	}
+
+	/**
+	 * @return the retryCount
+	 */
+	public int getRetryCount() {
+		return this.retryCount;
+	}
+
+	/**
+	 * @param retryCount
+	 *            the retryCount to set
+	 */
+	public void setRetryCount(int retryCount) {
+		this.retryCount = retryCount;
+	}
+
+	/**
+	 * @return entry key number, or null is returned if failed to get entry key
+	 * @throws IOException
+	 *             It's thrown if failed to connect to the server
+	 */
+	public Integer makeEntry() throws IOException {
+		final Socket socket = Gdx.net.newClientSocket(Protocol.TCP, this.host, this.port, this.hints);
+		for (int i = 0; i < this.retryCount; i++) {
+			try (final ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream()); final ObjectInputStream ois = new ObjectInputStream(socket.getInputStream())) {
+				final Integer entryKey = JMatcherClientUtils.makeEntry(oos, ois);
+				socket.dispose();
+				return entryKey;
+			} catch (IOException e) {
+				// failed
+			}
 		}
+		socket.dispose();
+		throw new IOException("failed to connect to the server"); //$NON-NLS-1$
 	}
 
 	/**
@@ -131,34 +160,19 @@ public class GdxJMatcherClient implements java.io.Closeable {
 	 * @throws IOException
 	 *             It's thrown if failed to connect to the server
 	 */
-	public boolean makeEntry(String key) throws IOException {
-		if (this.isClosed) {
-			throw new RuntimeException("it has been closed"); //$NON-NLS-1$
+	public boolean cancelEntry(Integer key) throws IOException {
+		final Socket socket = Gdx.net.newClientSocket(Protocol.TCP, this.host, this.port, this.hints);
+		for (int i = 0; i < this.retryCount; i++) {
+			try (final ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream()); final ObjectInputStream ois = new ObjectInputStream(socket.getInputStream())) {
+				final boolean isSuccess = JMatcherClientUtils.cancelEntry(key, oos, ois);
+				socket.dispose();
+				return isSuccess;
+			} catch (IOException e) {
+				// failed
+			}
 		}
-		try {
-			return JMatcherClientUtils.makeEntry(key, this.oos, this.ois);
-		} catch (IOException e) {
-			this.setupSocket();
-		}
-		return JMatcherClientUtils.makeEntry(key, this.oos, this.ois);
-	}
-
-	/**
-	 * @param key
-	 * @return true if success
-	 * @throws IOException
-	 *             It's thrown if failed to connect to the server
-	 */
-	public boolean cancelEntry(String key) throws IOException {
-		if (this.isClosed) {
-			throw new RuntimeException("it has been closed"); //$NON-NLS-1$
-		}
-		try {
-			return JMatcherClientUtils.cancelEntry(key, this.oos, this.ois);
-		} catch (IOException e) {
-			this.setupSocket();
-		}
-		return JMatcherClientUtils.cancelEntry(key, this.oos, this.ois);
+		socket.dispose();
+		throw new IOException("failed to connect to the server"); //$NON-NLS-1$
 	}
 
 	/**
@@ -167,24 +181,18 @@ public class GdxJMatcherClient implements java.io.Closeable {
 	 * @throws IOException
 	 *             It's thrown if failed to connect to the server
 	 */
-	public InetAddress findEntry(String key) throws IOException {
-		if (this.isClosed) {
-			throw new RuntimeException("it has been closed"); //$NON-NLS-1$
+	public InetAddress findEntry(Integer key) throws IOException {
+		final Socket socket = Gdx.net.newClientSocket(Protocol.TCP, this.host, this.port, this.hints);
+		for (int i = 0; i < this.retryCount; i++) {
+			try (final ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream()); final ObjectInputStream ois = new ObjectInputStream(socket.getInputStream())) {
+				final InetAddress address = JMatcherClientUtils.findEntry(key, oos, ois);
+				socket.dispose();
+				return address;
+			} catch (IOException e) {
+				// failed
+			}
 		}
-		try {
-			return JMatcherClientUtils.findEntry(key, this.oos, this.ois);
-		} catch (IOException e) {
-			this.setupSocket();
-		}
-		return JMatcherClientUtils.findEntry(key, this.oos, this.ois);
-	}
-
-	@Override
-	public void close() {
-		if (this.isClosed) {
-			return;
-		}
-		this.cleanSocket();
-		this.isClosed = true;
+		socket.dispose();
+		throw new IOException("failed to connect to the server"); //$NON-NLS-1$
 	}
 }
