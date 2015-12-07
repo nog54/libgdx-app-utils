@@ -49,7 +49,7 @@ public abstract class ApplicationActivity implements Screen {
 			return;
 		}
 		this.application = application;
-		this.initWidgets(this.application.getSkin());
+		this.initWidgets(this.application.getSkin(), this.application.getConfigurations());
 	}
 
 	protected ActivityBasedApplication getApplication() {
@@ -74,5 +74,5 @@ public abstract class ApplicationActivity implements Screen {
 		return this.application.getActivity() == this;
 	}
 
-	protected abstract void initWidgets(Skin applicationSkin);
+	protected abstract void initWidgets(Skin applicationSkin, ApplicationConfigurations configurations);
 }

@@ -144,4 +144,9 @@ public abstract class ActivityBasedApplication extends Game {
 	 */
 	public abstract Skin getSkin();
 
+	/**
+	 * @return configurations
+	 */
+	public abstract ApplicationConfigurations getConfigurations();
+
 }
