@@ -19,6 +19,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.InetAddress;
 
+import org.nognog.jmatcher.JMatcher;
 import org.nognog.jmatcher.JMatcherClientUtils;
 
 import com.badlogic.gdx.Gdx;
@@ -36,14 +37,13 @@ public class GdxJMatcherClient {
 	private SocketHints hints;
 	private int retryCount;
 
-	private static final int defaultPort = 11600;
 	private static final int defalutRetryCount = 2;
 
 	/**
 	 * @param host
 	 */
 	public GdxJMatcherClient(String host) {
-		this(host, defaultPort);
+		this(host, JMatcher.PORT);
 	}
 
 	/**
@@ -59,7 +59,7 @@ public class GdxJMatcherClient {
 	 * @param hints
 	 */
 	public GdxJMatcherClient(String host, SocketHints hints) {
-		this(host, defaultPort, hints);
+		this(host, JMatcher.PORT, hints);
 	}
 
 	/**
