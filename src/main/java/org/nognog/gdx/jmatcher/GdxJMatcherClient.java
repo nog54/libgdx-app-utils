@@ -18,12 +18,16 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.InetAddress;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
+import org.nognog.gdx.jmatcher.requester.CancelEntryListener;
+import org.nognog.gdx.jmatcher.requester.FindEntryListener;
+import org.nognog.gdx.jmatcher.requester.MakeEntryListener;
+import org.nognog.gdx.jmatcher.requester.Requester;
 import org.nognog.jmatcher.JMatcher;
 import org.nognog.jmatcher.JMatcherClientUtils;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Net.Protocol;
 import com.badlogic.gdx.net.Socket;
 import com.badlogic.gdx.net.SocketHints;
 
@@ -31,6 +35,8 @@ import com.badlogic.gdx.net.SocketHints;
  * @author goshi 2015/11/27
  */
 public class GdxJMatcherClient {
+
+	private final ExecutorService service;
 
 	private String host;
 	private int port;
@@ -71,6 +77,7 @@ public class GdxJMatcherClient {
 		this.host = host;
 		this.port = port;
 		this.hints = hints;
+		this.service = Executors.newSingleThreadExecutor();
 		this.retryCount = defalutRetryCount;
 	}
 
@@ -135,64 +142,47 @@ public class GdxJMatcherClient {
 	}
 
 	/**
-	 * @return entry key number, or null is returned if failed to get entry key
-	 * @throws IOException
-	 *             It's thrown if failed to connect to the server
+	 * @param listener
+	 *
 	 */
-	public Integer makeEntry() throws IOException {
-		final Socket socket = Gdx.net.newClientSocket(Protocol.TCP, this.host, this.port, this.hints);
-		for (int i = 0; i < this.retryCount; i++) {
-			try (final ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream()); final ObjectInputStream ois = new ObjectInputStream(socket.getInputStream())) {
-				final Integer entryKey = JMatcherClientUtils.makeEntry(oos, ois);
-				socket.dispose();
-				return entryKey;
-			} catch (IOException e) {
-				// failed
+	public void makeEntry(final MakeEntryListener listener) {
+		this.service.execute(new Requester<Integer>(this.host, this.port, this.hints, this.retryCount, listener) {
+			@Override
+			protected Integer executeRequest(final Socket socket) throws IOException {
+				try (final ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream()); final ObjectInputStream ois = new ObjectInputStream(socket.getInputStream())) {
+					return JMatcherClientUtils.makeEntry(oos, ois);
+				}
 			}
-		}
-		socket.dispose();
-		throw new IOException("failed to connect to the server"); //$NON-NLS-1$
+		});
 	}
 
 	/**
 	 * @param key
-	 * @return true if success
-	 * @throws IOException
-	 *             It's thrown if failed to connect to the server
+	 * @param listener
 	 */
-	public boolean cancelEntry(Integer key) throws IOException {
-		final Socket socket = Gdx.net.newClientSocket(Protocol.TCP, this.host, this.port, this.hints);
-		for (int i = 0; i < this.retryCount; i++) {
-			try (final ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream()); final ObjectInputStream ois = new ObjectInputStream(socket.getInputStream())) {
-				final boolean isSuccess = JMatcherClientUtils.cancelEntry(key, oos, ois);
-				socket.dispose();
-				return isSuccess;
-			} catch (IOException e) {
-				// failed
+	public void cancelEntry(final Integer key, final CancelEntryListener listener) {
+		this.service.execute(new Requester<Boolean>(this.host, this.port, this.hints, this.retryCount, listener) {
+			@Override
+			protected Boolean executeRequest(final Socket socket) throws IOException {
+				try (final ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream()); final ObjectInputStream ois = new ObjectInputStream(socket.getInputStream())) {
+					return Boolean.valueOf(JMatcherClientUtils.cancelEntry(key, oos, ois));
+				}
 			}
-		}
-		socket.dispose();
-		throw new IOException("failed to connect to the server"); //$NON-NLS-1$
+		});
 	}
 
 	/**
 	 * @param key
-	 * @return response
-	 * @throws IOException
-	 *             It's thrown if failed to connect to the server
+	 * @param listener
 	 */
-	public InetAddress findEntry(Integer key) throws IOException {
-		final Socket socket = Gdx.net.newClientSocket(Protocol.TCP, this.host, this.port, this.hints);
-		for (int i = 0; i < this.retryCount; i++) {
-			try (final ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream()); final ObjectInputStream ois = new ObjectInputStream(socket.getInputStream())) {
-				final InetAddress address = JMatcherClientUtils.findEntry(key, oos, ois);
-				socket.dispose();
-				return address;
-			} catch (IOException e) {
-				// failed
+	public void findEntry(final Integer key, final FindEntryListener listener) {
+		this.service.execute(new Requester<InetAddress>(this.host, this.port, this.hints, this.retryCount, listener) {
+			@Override
+			protected InetAddress executeRequest(final Socket socket) throws IOException {
+				try (final ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream()); final ObjectInputStream ois = new ObjectInputStream(socket.getInputStream())) {
+					return JMatcherClientUtils.findEntry(key, oos, ois);
+				}
 			}
-		}
-		socket.dispose();
-		throw new IOException("failed to connect to the server"); //$NON-NLS-1$
+		});
 	}
 }
