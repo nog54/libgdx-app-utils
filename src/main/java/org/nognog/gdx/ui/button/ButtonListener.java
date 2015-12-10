@@ -20,8 +20,8 @@ package org.nognog.gdx.ui.button;
 public interface ButtonListener {
 
 	/**
-	 * It is called when button is pressed
+	 * It is called when button is clicked
 	 */
-	public void press();
+	public void click();
 
 }
