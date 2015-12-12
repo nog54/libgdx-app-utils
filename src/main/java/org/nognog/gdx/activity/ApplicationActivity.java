@@ -56,6 +56,10 @@ public abstract class ApplicationActivity implements Screen {
 		return this.application;
 	}
 
+	protected ApplicationConfigurations getConfigurations() {
+		return this.application.getConfigurations();
+	}
+
 	/**
 	 * @return input processor
 	 */
