@@ -41,6 +41,8 @@ public class SimpleButton extends Button {
 	private static final Texture defaultUpTexture = UiUtils.createSimpleTexture(new Color(0.2f, 0.2f, 1, 1));
 	private static final Texture defaultDownTexture = UiUtils.createSimpleTexture(new Color(0.6f, 0.6f, 1, 1));
 
+	private boolean isEnabled;
+
 	/**
 	 * 
 	 */
@@ -121,16 +123,23 @@ public class SimpleButton extends Button {
 	 * @param downTexture
 	 */
 	public SimpleButton(float width, float height, BitmapFont font, Texture upTexture, Texture downTexture) {
+		this.isEnabled = true;
 		this.upImage = new Image(upTexture);
 		this.upImage.addListener(new ActorGestureListener() {
 
 			@Override
 			public void touchDown(InputEvent event, float x, float y, int pointer, int button) {
+				if (SimpleButton.this.isDisabled()) {
+					return;
+				}
 				SimpleButton.this.showDownImage();
 			}
 
 			@Override
 			public void pan(InputEvent event, float x, float y, float deltaX, float deltaY) {
+				if (SimpleButton.this.isDisabled()) {
+					return;
+				}
 				final Actor touchingActor = SimpleButton.this.hit(x, y, true);
 				if (touchingActor == SimpleButton.this.getDownImage() || touchingActor == SimpleButton.this.getUpImage()) {
 					SimpleButton.this.showDownImage();
@@ -141,6 +150,9 @@ public class SimpleButton extends Button {
 
 			@Override
 			public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+				if (SimpleButton.this.isDisabled()) {
+					return;
+				}
 				if (SimpleButton.this.hit(x, y, true) == SimpleButton.this.getDownImage()) {
 					SimpleButton.this.press();
 				}
@@ -158,24 +170,54 @@ public class SimpleButton extends Button {
 		this.addActor(this.label);
 		this.showUpImage();
 	}
-	
+
+	/**
+	 * @return true if it is enabled
+	 */
+	public boolean isEnabled() {
+		return this.isEnabled;
+	}
+
+	/**
+	 * @return true if it is disabled
+	 */
+	public boolean isDisabled() {
+		return !this.isEnabled;
+	}
+
+	/**
+	 * @param enabled
+	 */
+	public void setEnabled(boolean enabled) {
+		if (this.isEnabled == enabled) {
+			return;
+		}
+		this.isEnabled = enabled;
+		this.showUpImage();
+		if (this.isEnabled) {
+			this.getColor().a = 1;
+		} else {
+			this.getColor().a = 0.5f;
+		}
+	}
+
 	@Override
 	public float getMinWidth() {
 		return this.getPrefWidth();
 	}
-	
+
 	@Override
-	public float getMinHeight(){
+	public float getMinHeight() {
 		return this.getPrefHeight();
 	}
-	
+
 	@Override
 	public float getMaxWidth() {
 		return this.getPrefWidth();
 	}
-	
+
 	@Override
-	public float getMaxHeight(){
+	public float getMaxHeight() {
 		return this.getPrefHeight();
 	}
 
@@ -208,7 +250,7 @@ public class SimpleButton extends Button {
 	}
 
 	/**
-	 * @return a text of the label
+	 * @return a text of the labelS
 	 */
 	public String getText() {
 		return this.label.getText().toString();

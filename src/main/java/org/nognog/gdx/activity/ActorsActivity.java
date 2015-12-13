@@ -52,7 +52,7 @@ public abstract class ActorsActivity extends ApplicationActivity {
 	}
 
 	@Override
-	public final void render(float delta) {
+	public void render(float delta) {
 		this.stage.act(delta);
 		Gdx.gl.glClearColor(this.getBackgroundColor().r, this.getBackgroundColor().g, this.getBackgroundColor().b, this.getBackgroundColor().a);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
