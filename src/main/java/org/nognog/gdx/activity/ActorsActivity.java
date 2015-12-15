@@ -62,7 +62,6 @@ public abstract class ActorsActivity extends ApplicationActivity {
 		this.setBackgroundColor(Color.WHITE);
 		this.movableRange = new Range(0, viewport.getWorldWidth(), 0, viewport.getWorldHeight());
 		this.inputMultiplexer = new InputMultiplexer();
-		this.inputMultiplexer.addProcessor(this.stage);
 		final GestureListener gestureListener = new GestureAdapter() {
 
 			@Override
@@ -77,7 +76,6 @@ public abstract class ActorsActivity extends ApplicationActivity {
 				if (ActorsActivity.this.isEnabledInertia()) {
 					ActorsActivity.this.cameraVX = -velocityX;
 					ActorsActivity.this.cameraVY = velocityY;
-					return true;
 				}
 				return false;
 			}
@@ -96,7 +94,7 @@ public abstract class ActorsActivity extends ApplicationActivity {
 					this.moveCameraY(camera, deltaY);
 				}
 				ActorsActivity.this.adjustCameraPosition(camera);
-				return true;
+				return false;
 			}
 
 			private void moveCameraX(Camera camera, float amountX) {
@@ -112,6 +110,7 @@ public abstract class ActorsActivity extends ApplicationActivity {
 			}
 		};
 		this.inputMultiplexer.addProcessor(new GestureDetector(gestureListener));
+		this.inputMultiplexer.addProcessor(this.stage);
 	}
 
 	protected void adjustCameraPosition(Camera camera) {

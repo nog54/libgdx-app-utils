@@ -45,6 +45,8 @@ public class SimpleSwitch extends Switch {
 	private static final Texture defaultOnTexture = UiUtils.createSimpleTexture(new Color(0.2f, 1f, 0.2f, 1));
 	private static final Texture defaultOffTexture = UiUtils.createSimpleTexture(new Color(0.6f, 1f, 0.6f, 1));
 
+	private boolean pannable;
+
 	/**
 	 * @param initValue
 	 */
@@ -136,8 +138,32 @@ public class SimpleSwitch extends Switch {
 		super(initValue);
 		this.onImage = new Image(onTexture);
 		this.onImage.addListener(new ActorGestureListener() {
+			private boolean isBeingPanned;
+
+			@Override
+			public void touchDown(InputEvent event, float x, float y, int pointer, int button) {
+				if (SimpleSwitch.this.isDisabled()) {
+					return;
+				}
+				this.isBeingPanned = false;
+			}
+
+			@Override
+			public void pan(InputEvent event, float x, float y, float deltaX, float deltaY) {
+				if (SimpleSwitch.this.isDisabled()) {
+					return;
+				}
+				this.isBeingPanned = true;
+			}
+
 			@Override
 			public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+				if (SimpleSwitch.this.isDisabled()) {
+					return;
+				}
+				if (this.isBeingPanned && !SimpleSwitch.this.isPannable()) {
+					return;
+				}
 				if (SimpleSwitch.this.hit(x, y, true) == SimpleSwitch.this.getOnImage()) {
 					SimpleSwitch.this.off();
 				}
@@ -145,13 +171,27 @@ public class SimpleSwitch extends Switch {
 		});
 		this.offImage = new Image(offTexture);
 		this.offImage.addListener(new ActorGestureListener() {
+			private boolean isBeingPanned;
+
 			@Override
 			public void touchDown(InputEvent event, float x, float y, int pointer, int button) {
+				if (SimpleSwitch.this.isDisabled()) { // to make sure
+					return;
+				}
+				this.isBeingPanned = false;
 				SimpleSwitch.this.showOnActors();
 			}
 
 			@Override
 			public void pan(InputEvent event, float x, float y, float deltaX, float deltaY) {
+				if (SimpleSwitch.this.isDisabled()) { // to make sure
+					return;
+				}
+				this.isBeingPanned = true;
+				if (!SimpleSwitch.this.isPannable()) {
+					SimpleSwitch.this.showOffActors();
+					return;
+				}
 				final Actor touchingActor = SimpleSwitch.this.hit(x, y, true);
 				if (touchingActor == SimpleSwitch.this.getOffImage() || touchingActor == SimpleSwitch.this.getOnImage()) {
 					SimpleSwitch.this.showOnActors();
@@ -162,6 +202,12 @@ public class SimpleSwitch extends Switch {
 
 			@Override
 			public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+				if (SimpleSwitch.this.isDisabled()) { // to make sure
+					return;
+				}
+				if (this.isBeingPanned && !SimpleSwitch.this.isPannable()) {
+					return;
+				}
 				if (SimpleSwitch.this.hit(x, y, true) == SimpleSwitch.this.getOnImage()) {
 					SimpleSwitch.this.on();
 				}
@@ -197,6 +243,33 @@ public class SimpleSwitch extends Switch {
 		} else {
 			this.showOffActors();
 		}
+	}
+
+	@Override
+	protected void enableMyself() {
+		this.getColor().a = 1;
+		this.setTouchable(Touchable.enabled);
+	}
+
+	@Override
+	protected void disableMyself() {
+		this.getColor().a = 0.5f;
+		this.setTouchable(Touchable.disabled);
+	}
+
+	/**
+	 * @return the pannable
+	 */
+	public boolean isPannable() {
+		return this.pannable;
+	}
+
+	/**
+	 * @param pannable
+	 *            the pannable to set
+	 */
+	public void setPannable(boolean pannable) {
+		this.pannable = pannable;
 	}
 
 	@Override

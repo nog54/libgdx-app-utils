@@ -17,12 +17,17 @@ package org.nognog.gdx.ui.button;
 import com.badlogic.gdx.scenes.scene2d.ui.WidgetGroup;
 
 /**
+ * @author goshi
+ * 2015/12/15
+ */
+/**
  * @author goshi 2015/09/18
  */
 public abstract class Switch extends WidgetGroup {
 
 	private boolean on;
 	private SwitchListener listener;
+	private boolean enabled;
 
 	/**
 	 * constract new instance without listener
@@ -58,6 +63,7 @@ public abstract class Switch extends WidgetGroup {
 	public Switch(boolean on, SwitchListener listener) {
 		this.on = on;
 		this.listener = listener;
+		this.enabled = true;
 	}
 
 	/**
@@ -120,6 +126,47 @@ public abstract class Switch extends WidgetGroup {
 	public void setListener(SwitchListener listener) {
 		this.listener = listener;
 	}
+
+	/**
+	 * @return true if it is enabled
+	 */
+	public boolean isEnabled() {
+		return this.enabled;
+	}
+
+	/**
+	 * @return true if it is disabled
+	 */
+	public boolean isDisabled() {
+		return !this.enabled;
+	}
+
+	/**
+	 * @param enabled
+	 */
+	public void setEnabled(boolean enabled) {
+		if (this.enabled == enabled) {
+			return;
+		}
+		this.enabled = enabled;
+		if (this.enabled) {
+			this.enableMyself();
+		} else {
+			this.disableMyself();
+		}
+	}
+
+	/**
+	 * Enable myself. Maybe this or {@link #disableMyself()} should be called in
+	 * the constructor
+	 */
+	protected abstract void enableMyself();
+
+	/**
+	 * Disable myself. Maybe this or {@link #disableMyself()} should be called
+	 * in the constructor
+	 */
+	protected abstract void disableMyself();
 
 	protected abstract void afterOn();
 

@@ -41,7 +41,7 @@ public class SimpleButton extends Button {
 	private static final Texture defaultUpTexture = UiUtils.createSimpleTexture(new Color(0.2f, 0.2f, 1, 1));
 	private static final Texture defaultDownTexture = UiUtils.createSimpleTexture(new Color(0.6f, 0.6f, 1, 1));
 
-	private boolean isEnabled;
+	private boolean pannable;
 
 	/**
 	 * 
@@ -123,21 +123,27 @@ public class SimpleButton extends Button {
 	 * @param downTexture
 	 */
 	public SimpleButton(float width, float height, BitmapFont font, Texture upTexture, Texture downTexture) {
-		this.isEnabled = true;
 		this.upImage = new Image(upTexture);
 		this.upImage.addListener(new ActorGestureListener() {
+			private boolean isBeingPanned;
 
 			@Override
 			public void touchDown(InputEvent event, float x, float y, int pointer, int button) {
-				if (SimpleButton.this.isDisabled()) {
+				if (SimpleButton.this.isDisabled()) {	// to make sure
 					return;
 				}
+				this.isBeingPanned = false;
 				SimpleButton.this.showDownImage();
 			}
 
 			@Override
 			public void pan(InputEvent event, float x, float y, float deltaX, float deltaY) {
-				if (SimpleButton.this.isDisabled()) {
+				if (SimpleButton.this.isDisabled()) {	// to make sure
+					return;
+				}
+				this.isBeingPanned = true;
+				if (!SimpleButton.this.isPannable()) {
+					SimpleButton.this.showUpImage();
 					return;
 				}
 				final Actor touchingActor = SimpleButton.this.hit(x, y, true);
@@ -150,7 +156,10 @@ public class SimpleButton extends Button {
 
 			@Override
 			public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-				if (SimpleButton.this.isDisabled()) {
+				if (SimpleButton.this.isDisabled()) {	// to make sure
+					return;
+				}
+				if (this.isBeingPanned && !SimpleButton.this.isPannable()) {
 					return;
 				}
 				if (SimpleButton.this.hit(x, y, true) == SimpleButton.this.getDownImage()) {
@@ -171,34 +180,33 @@ public class SimpleButton extends Button {
 		this.showUpImage();
 	}
 
-	/**
-	 * @return true if it is enabled
-	 */
-	public boolean isEnabled() {
-		return this.isEnabled;
-	}
-
-	/**
-	 * @return true if it is disabled
-	 */
-	public boolean isDisabled() {
-		return !this.isEnabled;
-	}
-
-	/**
-	 * @param enabled
-	 */
-	public void setEnabled(boolean enabled) {
-		if (this.isEnabled == enabled) {
-			return;
-		}
-		this.isEnabled = enabled;
+	@Override
+	protected void enableMyself() {
 		this.showUpImage();
-		if (this.isEnabled) {
-			this.getColor().a = 1;
-		} else {
-			this.getColor().a = 0.5f;
-		}
+		this.getColor().a = 1;
+		this.setTouchable(Touchable.enabled);
+	}
+
+	@Override
+	protected void disableMyself() {
+		this.showUpImage();
+		this.getColor().a = 0.5f;
+		this.setTouchable(Touchable.disabled);
+	}
+
+	/**
+	 * @return the pannable
+	 */
+	public boolean isPannable() {
+		return this.pannable;
+	}
+
+	/**
+	 * @param pannable
+	 *            the pannable to set
+	 */
+	public void setPannable(boolean pannable) {
+		this.pannable = pannable;
 	}
 
 	@Override
@@ -299,5 +307,4 @@ public class SimpleButton extends Button {
 	protected Image getDownImage() {
 		return this.downImage;
 	}
-
 }

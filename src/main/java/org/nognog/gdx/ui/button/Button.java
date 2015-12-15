@@ -22,6 +22,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.WidgetGroup;
 public abstract class Button extends WidgetGroup {
 
 	private ButtonListener listener;
+	private boolean enabled;
 
 	/**
 	 * constract new instance without listener
@@ -37,6 +38,7 @@ public abstract class Button extends WidgetGroup {
 	 */
 	public Button(ButtonListener listener) {
 		this.listener = listener;
+		this.enabled = true;
 	}
 
 	/**
@@ -62,4 +64,45 @@ public abstract class Button extends WidgetGroup {
 	public void setListener(ButtonListener listener) {
 		this.listener = listener;
 	}
+
+	/**
+	 * @return true if it is enabled
+	 */
+	public boolean isEnabled() {
+		return this.enabled;
+	}
+
+	/**
+	 * @return true if it is disabled
+	 */
+	public boolean isDisabled() {
+		return !this.enabled;
+	}
+
+	/**
+	 * @param enabled
+	 */
+	public void setEnabled(boolean enabled) {
+		if (this.enabled == enabled) {
+			return;
+		}
+		this.enabled = enabled;
+		if (this.enabled) {
+			this.enableMyself();
+		} else {
+			this.disableMyself();
+		}
+	}
+
+	/**
+	 * Enable myself. Maybe this or {@link #disableMyself()} should be called in
+	 * the constructor
+	 */
+	protected abstract void enableMyself();
+
+	/**
+	 * Disable myself. Maybe this or {@link #disableMyself()} should be called
+	 * in the constructor
+	 */
+	protected abstract void disableMyself();
 }
