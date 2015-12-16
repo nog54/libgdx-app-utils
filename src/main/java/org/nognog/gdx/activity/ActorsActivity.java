@@ -93,7 +93,7 @@ public abstract class ActorsActivity extends ApplicationActivity {
 					this.moveCameraX(camera, deltaX);
 					this.moveCameraY(camera, deltaY);
 				}
-				ActorsActivity.this.adjustCameraPosition(camera);
+				ActorsActivity.this.adjustCameraPosition();
 				return false;
 			}
 
@@ -113,7 +113,8 @@ public abstract class ActorsActivity extends ApplicationActivity {
 		this.inputMultiplexer.addProcessor(this.stage);
 	}
 
-	protected void adjustCameraPosition(Camera camera) {
+	protected void adjustCameraPosition() {
+		final Camera camera = this.getCamera();
 		float viewingWidth = camera.viewportWidth;
 		float viewingHeight = camera.viewportHeight;
 		if (camera instanceof OrthographicCamera) {
@@ -162,7 +163,7 @@ public abstract class ActorsActivity extends ApplicationActivity {
 		this.applyInertiaY(delta, camera);
 		final float prevX = camera.position.x;
 		final float prevY = camera.position.y;
-		this.adjustCameraPosition(camera);
+		this.adjustCameraPosition();
 		if (prevX != camera.position.x) {
 			this.cameraVX = 0;
 		}
