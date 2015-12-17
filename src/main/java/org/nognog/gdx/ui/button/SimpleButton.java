@@ -38,6 +38,9 @@ public class SimpleButton extends Button {
 	private final Image downImage;
 	private Label label;
 
+	private boolean autoScaleLabel = false; // but table does not support
+											// scaling
+
 	private static final Texture defaultUpTexture = UiUtils.createSimpleTexture(new Color(0.2f, 0.2f, 1, 1));
 	private static final Texture defaultDownTexture = UiUtils.createSimpleTexture(new Color(0.6f, 0.6f, 1, 1));
 
@@ -129,7 +132,7 @@ public class SimpleButton extends Button {
 
 			@Override
 			public void touchDown(InputEvent event, float x, float y, int pointer, int button) {
-				if (SimpleButton.this.isDisabled()) {	// to make sure
+				if (SimpleButton.this.isDisabled()) { // to make sure
 					return;
 				}
 				this.isBeingPanned = false;
@@ -138,7 +141,7 @@ public class SimpleButton extends Button {
 
 			@Override
 			public void pan(InputEvent event, float x, float y, float deltaX, float deltaY) {
-				if (SimpleButton.this.isDisabled()) {	// to make sure
+				if (SimpleButton.this.isDisabled()) { // to make sure
 					return;
 				}
 				this.isBeingPanned = true;
@@ -156,7 +159,7 @@ public class SimpleButton extends Button {
 
 			@Override
 			public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-				if (SimpleButton.this.isDisabled()) {	// to make sure
+				if (SimpleButton.this.isDisabled()) { // to make sure
 					return;
 				}
 				if (this.isBeingPanned && !SimpleButton.this.isPannable()) {
@@ -169,10 +172,9 @@ public class SimpleButton extends Button {
 			}
 		});
 		this.downImage = new Image(downTexture);
-		this.label = new Label("button", new LabelStyle(font, Color.WHITE)); //$NON-NLS-1$
+		this.label = new Label("", new LabelStyle(font, Color.WHITE)); //$NON-NLS-1$
 		this.label.setTouchable(Touchable.disabled);
 		this.label.setAlignment(Align.center);
-		this.label.setVisible(width != 0 && height != 0);
 		this.setSize(width, height);
 		this.addActor(this.upImage);
 		this.addActor(this.downImage);
@@ -255,10 +257,28 @@ public class SimpleButton extends Button {
 		this.downImage.setSize(this.getWidth(), this.getHeight());
 		this.label.setPosition(this.getWidth() / 2, this.getHeight() / 2, Align.center);
 		this.label.setVisible(this.getWidth() != 0 && this.getHeight() != 0);
+		this.autoScale();
 	}
 
 	/**
-	 * @return a text of the labelS
+	 * It may be overridden to achieve prefered scaling
+	 */
+	protected void autoScale() {
+		if (this.autoScaleLabel) {
+			// fix here if want
+			final float labelAreaWidth = this.getWidth() / 8 * 7;
+			final float labelAreaHeight = this.getHeight() / 8 * 7;
+
+			float scale = Math.min(1, labelAreaWidth / this.label.getPrefWidth());
+			scale = Math.min(scale, labelAreaHeight / this.label.getPrefHeight());
+			if (scale != 0) {
+				this.label.setFontScale(scale);
+			}
+		}
+	}
+
+	/**
+	 * @return a text of the label
 	 */
 	public String getText() {
 		return this.label.getText().toString();
@@ -273,6 +293,13 @@ public class SimpleButton extends Button {
 	}
 
 	/**
+	 * @param wrap
+	 */
+	public void setLabelWrap(boolean wrap) {
+		this.label.setWrap(wrap);
+	}
+
+	/**
 	 * @param newScale
 	 */
 	public void setLabelScale(float newScale) {
@@ -280,10 +307,31 @@ public class SimpleButton extends Button {
 	}
 
 	/**
-	 * @return the scale of the label
+	 * @param newScale
 	 */
-	public float getLabelScale() {
+	public void setLabelScaleX(float newScale) {
+		this.label.setFontScaleX(newScale);
+	}
+
+	/**
+	 * @param newScale
+	 */
+	public void setLabelScaleY(float newScale) {
+		this.label.setFontScaleY(newScale);
+	}
+
+	/**
+	 * @return the scaleX of the label
+	 */
+	public float getLabelScaleX() {
 		return this.label.getFontScaleX();
+	}
+
+	/**
+	 * @return the scaleY of the label
+	 */
+	public float getLabelScaleY() {
+		return this.label.getFontScaleY();
 	}
 
 	/**
@@ -306,5 +354,26 @@ public class SimpleButton extends Button {
 
 	protected Image getDownImage() {
 		return this.downImage;
+	}
+
+	/**
+	 * @return the autoScaleLabel
+	 */
+	public boolean isAutoScaleLabel() {
+		return this.autoScaleLabel;
+	}
+
+	/**
+	 * @param autoScaleLabel
+	 *            the autoScaleLabel to set
+	 */
+	public void setAutoScaleLabel(boolean autoScaleLabel) {
+		if (this.autoScaleLabel == autoScaleLabel) {
+			return;
+		}
+		this.autoScaleLabel = autoScaleLabel;
+		if (this.autoScaleLabel) {
+			this.autoScale();
+		}
 	}
 }
