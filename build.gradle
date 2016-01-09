@@ -44,7 +44,6 @@ repositories {
 
 dependencies {
 	compile "com.badlogicgames.gdx:gdx:$gdxVersion"
-	compile "com.github.nog54:jmatcher-client:+"
 	compile "net.dermetfan.libgdx-utils:libgdx-utils:$libgdxUtilsVersion"
 
 	testCompile "junit:junit:+"
