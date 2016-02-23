@@ -36,16 +36,32 @@ public class UiUtils {
 		pixmap.fill();
 		return new TextureRegionDrawable(new TextureRegion(new Texture(pixmap)));
 	}
-	
+
 	/**
 	 * @param color
 	 * @return texture
 	 */
-	public static final Texture createSimpleTexture(Color color) {
-		final Pixmap texturePixmap = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
-		texturePixmap.setColor(color);
-		texturePixmap.drawPixel(0, 0);
+	public static Texture createSimpleTexture(Color color) {
+		return createSimpleTexture(color, 1, 1);
+	}
 
+	/**
+	 * @param color
+	 * @param width
+	 * @param height
+	 * @return texture
+	 */
+	public static Texture createSimpleTexture(Color color, int width, int height) {
+		if (width < 1 || height < 1 || color == null) {
+			throw new IllegalArgumentException();
+		}
+		final Pixmap texturePixmap = new Pixmap(width, height, Pixmap.Format.RGBA8888);
+		texturePixmap.setColor(color);
+		for (int i = 0; i < width; i++) {
+			for (int j = 0; j < height; j++) {
+				texturePixmap.drawPixel(i, j);
+			}
+		}
 		final Texture result = new Texture(texturePixmap);
 		texturePixmap.dispose();
 		return result;
