@@ -25,6 +25,7 @@ import com.badlogic.gdx.input.GestureDetector;
 import com.badlogic.gdx.input.GestureDetector.GestureAdapter;
 import com.badlogic.gdx.input.GestureDetector.GestureListener;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.FitViewport;
@@ -86,12 +87,15 @@ public abstract class ActorsActivity extends ApplicationActivity {
 					return false;
 				}
 				final Camera camera = ActorsActivity.this.getCamera();
+				final Vector2 delta = new Vector2(deltaX, deltaY);
+				delta.x *= camera.viewportWidth / Gdx.graphics.getWidth();
+				delta.y *= camera.viewportHeight / Gdx.graphics.getHeight();
 				if (camera instanceof OrthographicCamera) {
-					this.moveCameraX(camera, -deltaX * ((OrthographicCamera) camera).zoom);
-					this.moveCameraY(camera, deltaY * ((OrthographicCamera) camera).zoom);
+					this.moveCameraX(camera, -delta.x * ((OrthographicCamera) camera).zoom);
+					this.moveCameraY(camera, delta.y * ((OrthographicCamera) camera).zoom);
 				} else {
-					this.moveCameraX(camera, deltaX);
-					this.moveCameraY(camera, deltaY);
+					this.moveCameraX(camera, -delta.x);
+					this.moveCameraY(camera, delta.y);
 				}
 				ActorsActivity.this.adjustCameraPosition();
 				return false;
