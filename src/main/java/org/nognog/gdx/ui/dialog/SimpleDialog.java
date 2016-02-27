@@ -18,48 +18,88 @@ import org.nognog.gdx.ui.ColorUtils;
 import org.nognog.gdx.ui.Constants;
 import org.nognog.gdx.ui.UiUtils;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 
 /**
  * @author goshi 2015/04/24
  */
 public class SimpleDialog extends Group {
-
 	private Label textLabel;
 	private TextButton leftButton;
 	private TextButton rightButton;
 	private SimpleDialogListener listener;
+	private Table table;
 
 	/**
 	 * @param width
 	 * @param height
 	 * @param text
-	 * @param textFont
 	 * @param leftButtonText
 	 * @param rightButtonText
+	 * @param font
+	 */
+	public SimpleDialog(float width, float height, String text, String leftButtonText, String rightButtonText, BitmapFont font) {
+		this(width, height, text, leftButtonText, rightButtonText, font, createLabelStyle(font), createButtonStyle(font), createButtonStyle(font));
+	}
+
+	protected static TextButtonStyle createButtonStyle(BitmapFont font) {
+		final TextureRegionDrawable up = UiUtils.getPlaneTextureRegionDrawable(1, 1, ColorUtils.softClearPeterRiver);
+		final TextureRegionDrawable down = UiUtils.getPlaneTextureRegionDrawable(1, 1, ColorUtils.softClearBelizeHole);
+		final TextureRegionDrawable checked = UiUtils.getPlaneTextureRegionDrawable(1, 1, ColorUtils.softClearPeterRiver);
+		return new TextButtonStyle(up, down, checked, font);
+	}
+
+	protected static LabelStyle createLabelStyle(BitmapFont font) {
+		return new LabelStyle(font, new Color(ColorUtils.carrot));
+	}
+
+	/**
+	 * @param width
+	 * @param height
+	 * @param text
+	 * @param leftButtonText
+	 * @param rightButtonText
+	 * @param skin
+	 */
+	public SimpleDialog(float width, float height, String text, String leftButtonText, String rightButtonText, Skin skin) {
+		this(width, height, text, leftButtonText, rightButtonText, skin.get(BitmapFont.class), skin.get(LabelStyle.class), skin.get(TextButtonStyle.class), skin.get(TextButtonStyle.class));
+	}
+
+	/**
+	 * @param width
+	 * @param height
+	 * @param text
+	 * @param leftButtonText
+	 * @param rightButtonText
+	 * @param textFont
+	 * @param labelStyle
 	 * @param leftButtonStyle
 	 * @param rightButtonStyle
 	 */
-	public SimpleDialog(float width, float height, String text, BitmapFont textFont, String leftButtonText, String rightButtonText, TextButtonStyle leftButtonStyle, TextButtonStyle rightButtonStyle) {
+	public SimpleDialog(float width, float height, String text, String leftButtonText, String rightButtonText, BitmapFont textFont, LabelStyle labelStyle, TextButtonStyle leftButtonStyle,
+			TextButtonStyle rightButtonStyle) {
 		this.setWidth(width);
 		this.setHeight(height);
-		final Table table = new Table();
-		this.textLabel = new Label(text, new LabelStyle(textFont, ColorUtils.carrot));
+		this.table = new Table();
+		this.textLabel = new Label(text, labelStyle);
 		this.textLabel.setWidth(width);
 		this.textLabel.setWrap(true);
 		final float goldenRatio = Constants.getGoldenRatio();
-		final float leftSpace = width / (3 + 2 * goldenRatio) / 2;
-		final float rightSpace = leftSpace;
-		final float textTopSpace = leftSpace;
-		table.add(this.textLabel).left().width(width - leftSpace - rightSpace).padLeft(leftSpace).padRight(rightSpace).padTop(textTopSpace).row();
+		final float wholeSpace = width / (3 + 2 * goldenRatio) / 2;
+		this.table.pad(wholeSpace);
+		this.table.add(this.textLabel).left().fillX().colspan(2).row();
 		this.leftButton = new TextButton(leftButtonText, leftButtonStyle);
 		this.rightButton = new TextButton(rightButtonText, rightButtonStyle);
 		this.leftButton.addListener(new ClickListener() {
@@ -80,15 +120,13 @@ public class SimpleDialog extends Group {
 				}
 			}
 		});
-		final float centerSpace = leftSpace;
-		final float upSpace = width / (2 + goldenRatio);
-		final float downSpace = upSpace;
-		table.add(this.leftButton).expandX().fillX().expandY().fillY().padLeft(leftSpace).padRight(centerSpace / 2).padTop(upSpace).padBottom(downSpace).uniform();
-		table.add(this.rightButton).expandX().fillX().expandY().fillY().padRight(rightSpace).padLeft(centerSpace / 2).padTop(upSpace).padBottom(downSpace).uniform();
-		table.setBackground(UiUtils.getPlaneTextureRegionDrawable(1, 1, ColorUtils.clearBlack));
-		table.setWidth(width);
-		table.setHeight(height);
-		this.addActor(table);
+		final float widgetsSpan = wholeSpace * 2;
+		this.table.add(this.leftButton).expandX().fillX().expandY().uniform().padRight(widgetsSpan / 2);
+		this.table.add(this.rightButton).expandX().fillX().expandY().uniform().padLeft(widgetsSpan / 2);
+		this.table.setBackground(UiUtils.getPlaneTextureRegionDrawable(1, 1, ColorUtils.clearBlack));
+		this.table.setWidth(width);
+		this.table.setHeight(height);
+		this.addActor(this.table);
 	}
 
 	/**
@@ -138,6 +176,20 @@ public class SimpleDialog extends Group {
 	 */
 	public void setText(String text) {
 		this.textLabel.setText(text);
+	}
+
+	/**
+	 * @param background
+	 */
+	public void setBackground(Drawable background) {
+		this.table.setBackground(background);
+	}
+
+	/**
+	 * @return the background
+	 */
+	public Drawable getBackground() {
+		return this.table.getBackground();
 	}
 
 	/**

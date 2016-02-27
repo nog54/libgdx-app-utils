@@ -14,43 +14,54 @@
 
 package org.nognog.gdx.ui.dialog;
 
-import org.nognog.gdx.camera.ICamera;
 import org.nognog.gdx.camera.CameraObserver;
-import org.nognog.gdx.ui.ColorUtils;
-import org.nognog.gdx.ui.UiUtils;
+import org.nognog.gdx.camera.ICamera;
 
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 
 /**
  * @author goshi 2015/05/05
  */
 public class CameraFitSimpleDialog extends SimpleDialog implements CameraObserver {
 
-	private static final TextureRegionDrawable softClearPeterRiverDrawable = UiUtils.getPlaneTextureRegionDrawable(1, 1, ColorUtils.softClearPeterRiver);
-	private static final TextureRegionDrawable softClearBelizeHoleDrawable = UiUtils.getPlaneTextureRegionDrawable(1, 1, ColorUtils.softClearBelizeHole);
-
 	/**
 	 * @param camera
-	 * @param font
-	 */
-	public CameraFitSimpleDialog(ICamera camera, BitmapFont font) {
-		this(camera.getViewportWidth(), camera.getViewportHeight(), "", "", "", font, createButtonStyle(font)); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-	}
-
-	/**
-	 * @param freeSquare
 	 * @param text
 	 * @param leftButtonText
 	 * @param rightButtonText
+	 * @param font
 	 */
-	private CameraFitSimpleDialog(float width, float height, String text, String leftButtonText, String rightButtonText, BitmapFont font, TextButtonStyle buttonStyle) {
-		super(width, height, text, font, leftButtonText, rightButtonText, buttonStyle, buttonStyle);
+	public CameraFitSimpleDialog(ICamera camera, String text, String leftButtonText, String rightButtonText, BitmapFont font) {
+		this(camera, text, leftButtonText, rightButtonText, font, createLabelStyle(font), createButtonStyle(font), createButtonStyle(font));
 	}
 
-	private static TextButtonStyle createButtonStyle(BitmapFont font) {
-		return new TextButtonStyle(softClearPeterRiverDrawable, softClearBelizeHoleDrawable, softClearPeterRiverDrawable, font);
+	/**
+	 * @param camera
+	 * @param text
+	 * @param leftButtonText
+	 * @param rightButtonText
+	 * @param font
+	 * @param labelStyle
+	 * @param leftButtonStyle
+	 * @param rightButtonStyle
+	 */
+	public CameraFitSimpleDialog(ICamera camera, String text, String leftButtonText, String rightButtonText, BitmapFont font, LabelStyle labelStyle, TextButtonStyle leftButtonStyle,
+			TextButtonStyle rightButtonStyle) {
+		super(camera.getViewportWidth(), camera.getViewportHeight(), text, leftButtonText, rightButtonText, font, labelStyle, leftButtonStyle, rightButtonStyle);
+	}
+
+	/**
+	 * @param camera
+	 * @param text
+	 * @param leftButtonText
+	 * @param rightButtonText
+	 * @param skin
+	 */
+	public CameraFitSimpleDialog(ICamera camera, String text, String leftButtonText, String rightButtonText, Skin skin) {
+		super(camera.getViewportWidth(), camera.getViewportHeight(), text, leftButtonText, rightButtonText, skin);
 	}
 
 	@Override

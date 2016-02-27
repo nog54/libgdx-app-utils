@@ -15,6 +15,8 @@
 package org.nognog.gdx.ui.dialog;
 
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 
 /**
@@ -26,14 +28,34 @@ public abstract class SimpleYesNoDialog extends SimpleDialog {
 	 * @param width
 	 * @param height
 	 * @param text
-	 * @param textFont
-	 * @param yesButtonStyle
-	 * @param noButtonStyle
+	 * @param font
 	 */
-	public SimpleYesNoDialog(float width, float height, String text, BitmapFont textFont, TextButtonStyle yesButtonStyle, TextButtonStyle noButtonStyle) {
-		super(width, height, text, textFont, "Yes", "No", yesButtonStyle, noButtonStyle); //$NON-NLS-1$ //$NON-NLS-2$
-		this.setListener(new SimpleDialog.SimpleDialogListener() {
+	public SimpleYesNoDialog(float width, float height, String text, BitmapFont font) {
+		this(width, height, text, font, createLabelStyle(font), createButtonStyle(font), createButtonStyle(font));
+	}
 
+	/**
+	 * @param width
+	 * @param height
+	 * @param text
+	 * @param skin
+	 */
+	public SimpleYesNoDialog(float width, float height, String text, Skin skin) {
+		this(width, height, text, skin.get(BitmapFont.class), skin.get(LabelStyle.class), skin.get(TextButtonStyle.class), skin.get(TextButtonStyle.class));
+	}
+
+	/**
+	 * @param width
+	 * @param height
+	 * @param text
+	 * @param textFont
+	 * @param labelStyle
+	 * @param leftButtonStyle
+	 * @param rightButtonStyle
+	 */
+	public SimpleYesNoDialog(float width, float height, String text, BitmapFont textFont, LabelStyle labelStyle, TextButtonStyle leftButtonStyle, TextButtonStyle rightButtonStyle) {
+		super(width, height, text, "Yes", "No", textFont, labelStyle, leftButtonStyle, rightButtonStyle); //$NON-NLS-1$ //$NON-NLS-2$
+		this.setListener(new SimpleDialog.SimpleDialogListener() {
 			@Override
 			public void rightButtonClicked() {
 				SimpleYesNoDialog.this.no();
@@ -44,7 +66,6 @@ public abstract class SimpleYesNoDialog extends SimpleDialog {
 				SimpleYesNoDialog.this.yes();
 			}
 		});
-
 	}
 
 	/**
