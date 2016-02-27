@@ -40,6 +40,16 @@ public abstract class ObservableCamera implements ICamera {
 			this.cameraObservers.add(observer);
 		}
 	}
+	
+	/**
+	 * @param observer
+	 */
+	public void addCameraObserverAndUpdateIfAdded(CameraObserver observer){
+		if (!this.cameraObservers.contains(observer)) {
+			this.cameraObservers.add(observer);
+			observer.updateCamera(this);
+		}
+	}
 
 	/**
 	 * @param observer

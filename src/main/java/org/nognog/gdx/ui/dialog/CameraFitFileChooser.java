@@ -21,6 +21,7 @@ import net.dermetfan.gdx.scenes.scene2d.ui.ListFileChooser;
 import net.dermetfan.gdx.scenes.scene2d.ui.ListFileChooser.Style;
 
 import org.nognog.gdx.camera.ICamera;
+import org.nognog.gdx.camera.ObservableCamera;
 import org.nognog.gdx.camera.CameraObserver;
 import org.nognog.gdx.ui.ColorUtils;
 import org.nognog.gdx.ui.UiUtils;
@@ -38,6 +39,10 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 
 /**
+ * You should add the instance of this class via
+ * {@link ObservableCamera#addCameraObserverAndUpdateIfAdded(CameraObserver)} so
+ * that the instance will be shown properly.
+ * 
  * @author goshi 2015/04/20
  */
 public class CameraFitFileChooser extends Group implements CameraObserver {
@@ -49,14 +54,9 @@ public class CameraFitFileChooser extends Group implements CameraObserver {
 	 * @param font
 	 * @param listener
 	 */
-	public CameraFitFileChooser(ICamera camera, BitmapFont font, Listener listener) {
-		final float width = camera.getViewportWidth();
-		final float height = camera.getViewportHeight();
-		this.setSize(width, height);
+	public CameraFitFileChooser(BitmapFont font, Listener listener) {
 		this.chooser = new ListFileChooser(createFileChooserStyle(font), listener);
-		this.chooser.setSize(width, height);
 		this.chooser.setFileFilter(new java.io.FileFilter() {
-
 			@Override
 			public boolean accept(File pathname) {
 				if (pathname.isDirectory()) {
@@ -105,9 +105,13 @@ public class CameraFitFileChooser extends Group implements CameraObserver {
 
 	@Override
 	public void updateCamera(ICamera camera) {
+		final float width = camera.getViewportWidth();
+		final float height = camera.getViewportHeight();
+		this.setSize(width, height);
+		this.chooser.setSize(width, height);
 		final float currentCameraZoom = camera.getZoom();
-		final float newX = camera.getX() - currentCameraZoom * (camera.getViewportWidth() / 2);
-		final float newY = camera.getY() + currentCameraZoom * (camera.getViewportHeight() / 2 - this.getHeight());
+		final float newX = camera.getX() - currentCameraZoom * (width / 2);
+		final float newY = camera.getY() + currentCameraZoom * (height / 2 - this.getHeight());
 		this.setPosition(newX, newY);
 		this.setScale(currentCameraZoom);
 	}

@@ -16,6 +16,7 @@ package org.nognog.gdx.ui.dialog;
 
 import org.nognog.gdx.camera.CameraObserver;
 import org.nognog.gdx.camera.ICamera;
+import org.nognog.gdx.camera.ObservableCamera;
 
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
@@ -23,6 +24,10 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 
 /**
+ * You should add the instance of this class via
+ * {@link ObservableCamera#addCameraObserverAndUpdateIfAdded(CameraObserver)} so
+ * that the instance will be shown properly.
+ * 
  * @author goshi 2015/05/05
  */
 public class CameraFitSimpleDialog extends SimpleDialog implements CameraObserver {
@@ -34,8 +39,8 @@ public class CameraFitSimpleDialog extends SimpleDialog implements CameraObserve
 	 * @param rightButtonText
 	 * @param font
 	 */
-	public CameraFitSimpleDialog(ICamera camera, String text, String leftButtonText, String rightButtonText, BitmapFont font) {
-		this(camera, text, leftButtonText, rightButtonText, font, createLabelStyle(font), createButtonStyle(font), createButtonStyle(font));
+	public CameraFitSimpleDialog(String text, String leftButtonText, String rightButtonText, BitmapFont font) {
+		this(text, leftButtonText, rightButtonText, font, createLabelStyle(font), createButtonStyle(font), createButtonStyle(font));
 	}
 
 	/**
@@ -48,9 +53,9 @@ public class CameraFitSimpleDialog extends SimpleDialog implements CameraObserve
 	 * @param leftButtonStyle
 	 * @param rightButtonStyle
 	 */
-	public CameraFitSimpleDialog(ICamera camera, String text, String leftButtonText, String rightButtonText, BitmapFont font, LabelStyle labelStyle, TextButtonStyle leftButtonStyle,
+	public CameraFitSimpleDialog(String text, String leftButtonText, String rightButtonText, BitmapFont font, LabelStyle labelStyle, TextButtonStyle leftButtonStyle,
 			TextButtonStyle rightButtonStyle) {
-		super(camera.getViewportWidth(), camera.getViewportHeight(), text, leftButtonText, rightButtonText, font, labelStyle, leftButtonStyle, rightButtonStyle);
+		super(0, 0, text, leftButtonText, rightButtonText, font, labelStyle, leftButtonStyle, rightButtonStyle);
 	}
 
 	/**
@@ -60,16 +65,18 @@ public class CameraFitSimpleDialog extends SimpleDialog implements CameraObserve
 	 * @param rightButtonText
 	 * @param skin
 	 */
-	public CameraFitSimpleDialog(ICamera camera, String text, String leftButtonText, String rightButtonText, Skin skin) {
-		super(camera.getViewportWidth(), camera.getViewportHeight(), text, leftButtonText, rightButtonText, skin);
+	public CameraFitSimpleDialog(String text, String leftButtonText, String rightButtonText, Skin skin) {
+		super(0, 0, text, leftButtonText, rightButtonText, skin);
 	}
 
 	@Override
 	public void updateCamera(ICamera camera) {
+		this.setSize(camera.getViewportWidth(), camera.getViewportHeight());
 		final float currentCameraZoom = camera.getZoom();
 		final float newX = camera.getX() - currentCameraZoom * (camera.getViewportWidth() / 2);
 		final float newY = camera.getY() + currentCameraZoom * (camera.getViewportHeight() / 2 - this.getHeight());
 		this.setPosition(newX, newY);
 		this.setScale(currentCameraZoom);
 	}
+
 }

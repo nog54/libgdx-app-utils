@@ -14,7 +14,8 @@
 
 package org.nognog.gdx.ui.dialog;
 
-import org.nognog.gdx.camera.ICamera;
+import org.nognog.gdx.camera.CameraObserver;
+import org.nognog.gdx.camera.ObservableCamera;
 
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
@@ -22,6 +23,10 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 
 /**
+ * You should add the instance of this class via
+ * {@link ObservableCamera#addCameraObserverAndUpdateIfAdded(CameraObserver)} so
+ * that the instance will be shown properly.
+ * 
  * @author goshi 2015/05/05
  */
 public abstract class CameraFitSimpleYesNoDialog extends CameraFitSimpleDialog {
@@ -31,8 +36,8 @@ public abstract class CameraFitSimpleYesNoDialog extends CameraFitSimpleDialog {
 	 * @param text
 	 * @param font
 	 */
-	public CameraFitSimpleYesNoDialog(ICamera camera, String text, BitmapFont font) {
-		this(camera, text, font, createLabelStyle(font), createButtonStyle(font), createButtonStyle(font));
+	public CameraFitSimpleYesNoDialog(String text, BitmapFont font) {
+		this(text, font, createLabelStyle(font), createButtonStyle(font), createButtonStyle(font));
 	}
 
 	/**
@@ -40,8 +45,8 @@ public abstract class CameraFitSimpleYesNoDialog extends CameraFitSimpleDialog {
 	 * @param text
 	 * @param skin
 	 */
-	public CameraFitSimpleYesNoDialog(ICamera camera, String text, Skin skin) {
-		this(camera, text, skin.get(BitmapFont.class), skin.get(LabelStyle.class), skin.get(TextButtonStyle.class), skin.get(TextButtonStyle.class));
+	public CameraFitSimpleYesNoDialog(String text, Skin skin) {
+		this(text, skin.get(BitmapFont.class), skin.get(LabelStyle.class), skin.get(TextButtonStyle.class), skin.get(TextButtonStyle.class));
 	}
 
 	/**
@@ -52,8 +57,8 @@ public abstract class CameraFitSimpleYesNoDialog extends CameraFitSimpleDialog {
 	 * @param leftButtonStyle
 	 * @param rightButtonStyle
 	 */
-	public CameraFitSimpleYesNoDialog(ICamera camera, String text, BitmapFont font, LabelStyle labelStyle, TextButtonStyle leftButtonStyle, TextButtonStyle rightButtonStyle) {
-		super(camera, text, "Yes", "No", font, labelStyle, leftButtonStyle, rightButtonStyle); //$NON-NLS-1$ //$NON-NLS-2$
+	public CameraFitSimpleYesNoDialog(String text, BitmapFont font, LabelStyle labelStyle, TextButtonStyle leftButtonStyle, TextButtonStyle rightButtonStyle) {
+		super(text, "Yes", "No", font, labelStyle, leftButtonStyle, rightButtonStyle); //$NON-NLS-1$ //$NON-NLS-2$
 		this.setListener(new SimpleDialogListener() {
 			@Override
 			public void rightButtonClicked() {
