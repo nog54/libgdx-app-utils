@@ -19,7 +19,6 @@ import org.nognog.gdx.activity.transition.Transition;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.ObjectSet;
 
 /**
@@ -138,11 +137,6 @@ public abstract class ActivityBasedApplication extends Game {
 			}
 		}
 	}
-
-	/**
-	 * @return skin
-	 */
-	public abstract Skin getSkin();
 
 	/**
 	 * @return configurations

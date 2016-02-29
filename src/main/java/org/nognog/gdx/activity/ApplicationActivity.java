@@ -18,7 +18,6 @@ import org.nognog.gdx.activity.transition.Transition;
 
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 
 /**
  * @author goshi 2015/09/18
@@ -44,12 +43,8 @@ public abstract class ApplicationActivity implements Screen {
 	/**
 	 * @param application
 	 */
-	public void setApplication(ActivityBasedApplication application) {
-		if (this.application == application) {
-			return;
-		}
+	protected void setApplication(ActivityBasedApplication application) {
 		this.application = application;
-		this.init(this.application.getSkin(), this.application.getConfigurations());
 	}
 
 	protected ActivityBasedApplication getApplication() {
@@ -57,6 +52,9 @@ public abstract class ApplicationActivity implements Screen {
 	}
 
 	protected ApplicationConfigurations getConfigurations() {
+		if (this.application == null) {
+			return null;
+		}
 		return this.application.getConfigurations();
 	}
 
@@ -77,6 +75,4 @@ public abstract class ApplicationActivity implements Screen {
 		}
 		return this.application.getActivity() == this;
 	}
-
-	protected abstract void init(Skin applicationSkin, ApplicationConfigurations configurations);
 }

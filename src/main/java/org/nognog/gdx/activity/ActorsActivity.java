@@ -28,6 +28,7 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
@@ -144,6 +145,30 @@ public abstract class ActorsActivity extends ApplicationActivity {
 			final float maxCameraPositionY = range.getTopBorder() - viewingHeight / 2f;
 			camera.position.y = MathUtils.clamp(camera.position.y, minCameraPositionY, maxCameraPositionY);
 		}
+	}
+
+	@Override
+	public void setApplication(ActivityBasedApplication application) {
+		if (this.getApplication() == application) {
+			return;
+		}
+		if (!(application instanceof ActivityBased2dApplication)) {
+			throw new IllegalArgumentException();
+		}
+		super.setApplication(application);
+		this.init(((ActivityBased2dApplication) application).getSkin(), application.getConfigurations());
+	}
+
+	protected abstract void init(Skin applicationSkin, ApplicationConfigurations configurations);
+
+	/**
+	 * @return the skin
+	 */
+	public Skin getSkin() {
+		if (this.getApplication() == null) {
+			return null;
+		}
+		return ((ActivityBased2dApplication) this.getApplication()).getSkin();
 	}
 
 	@Override
