@@ -75,8 +75,12 @@ public abstract class ActorsActivity extends ApplicationActivity {
 			@Override
 			public boolean fling(float velocityX, float velocityY, int button) {
 				if (ActorsActivity.this.isEnabledInertia()) {
-					ActorsActivity.this.cameraVX = -velocityX;
-					ActorsActivity.this.cameraVY = velocityY;
+					if (ActorsActivity.this.isEnabledToMoveCameraX()) {
+						ActorsActivity.this.cameraVX = -velocityX;
+					}
+					if (ActorsActivity.this.isEnabledToMoveCameraY()) {
+						ActorsActivity.this.cameraVY = velocityY;
+					}
 				}
 				return false;
 			}
