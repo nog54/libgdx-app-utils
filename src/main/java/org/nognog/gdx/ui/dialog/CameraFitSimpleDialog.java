@@ -33,7 +33,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 public class CameraFitSimpleDialog extends SimpleDialog implements CameraObserver {
 
 	/**
-	 * @param camera
 	 * @param text
 	 * @param leftButtonText
 	 * @param rightButtonText
@@ -44,7 +43,6 @@ public class CameraFitSimpleDialog extends SimpleDialog implements CameraObserve
 	}
 
 	/**
-	 * @param camera
 	 * @param text
 	 * @param leftButtonText
 	 * @param rightButtonText
@@ -59,7 +57,6 @@ public class CameraFitSimpleDialog extends SimpleDialog implements CameraObserve
 	}
 
 	/**
-	 * @param camera
 	 * @param text
 	 * @param leftButtonText
 	 * @param rightButtonText
@@ -67,6 +64,18 @@ public class CameraFitSimpleDialog extends SimpleDialog implements CameraObserve
 	 */
 	public CameraFitSimpleDialog(String text, String leftButtonText, String rightButtonText, Skin skin) {
 		super(0, 0, text, leftButtonText, rightButtonText, skin);
+	}
+	
+	/**
+	 * @param text
+	 * @param leftButtonText
+	 * @param rightButtonText
+	 * @param skin
+	 * @param labelStyleName 
+	 * @param textButtonStyleName 
+	 */
+	public CameraFitSimpleDialog(String text, String leftButtonText, String rightButtonText, Skin skin, String labelStyleName, String textButtonStyleName) {
+		super(0, 0, text, leftButtonText, rightButtonText, skin, labelStyleName, textButtonStyleName);
 	}
 
 	@Override

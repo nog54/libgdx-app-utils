@@ -32,7 +32,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 public abstract class CameraFitSimpleYesNoDialog extends CameraFitSimpleDialog {
 
 	/**
-	 * @param camera
 	 * @param text
 	 * @param font
 	 */
@@ -41,7 +40,6 @@ public abstract class CameraFitSimpleYesNoDialog extends CameraFitSimpleDialog {
 	}
 
 	/**
-	 * @param camera
 	 * @param text
 	 * @param skin
 	 */
@@ -50,7 +48,16 @@ public abstract class CameraFitSimpleYesNoDialog extends CameraFitSimpleDialog {
 	}
 
 	/**
-	 * @param camera
+	 * @param text
+	 * @param skin
+	 * @param labelStyleName
+	 * @param textButtonStyleName
+	 */
+	public CameraFitSimpleYesNoDialog(String text, Skin skin, String labelStyleName, String textButtonStyleName) {
+		this(text, skin.get(BitmapFont.class), skin.get(labelStyleName, LabelStyle.class), skin.get(textButtonStyleName, TextButtonStyle.class), skin.get(textButtonStyleName, TextButtonStyle.class));
+	}
+
+	/**
 	 * @param text
 	 * @param font
 	 * @param labelStyle

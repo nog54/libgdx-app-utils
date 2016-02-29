@@ -83,6 +83,21 @@ public class SimpleDialog extends Group {
 	 * @param text
 	 * @param leftButtonText
 	 * @param rightButtonText
+	 * @param skin
+	 * @param labelStyleName
+	 * @param textButtonStyleName
+	 */
+	public SimpleDialog(float width, float height, String text, String leftButtonText, String rightButtonText, Skin skin, String labelStyleName, String textButtonStyleName) {
+		this(width, height, text, leftButtonText, rightButtonText, skin.get(BitmapFont.class), skin.get(labelStyleName, LabelStyle.class), skin.get(textButtonStyleName, TextButtonStyle.class),
+				skin.get(textButtonStyleName, TextButtonStyle.class));
+	}
+
+	/**
+	 * @param width
+	 * @param height
+	 * @param text
+	 * @param leftButtonText
+	 * @param rightButtonText
 	 * @param textFont
 	 * @param labelStyle
 	 * @param leftButtonStyle

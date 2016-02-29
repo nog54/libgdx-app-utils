@@ -48,6 +48,18 @@ public abstract class SimpleYesNoDialog extends SimpleDialog {
 	 * @param width
 	 * @param height
 	 * @param text
+	 * @param skin
+	 * @param labelStyleName
+	 * @param textButtonStyleName
+	 */
+	public SimpleYesNoDialog(float width, float height, String text, Skin skin, String labelStyleName, String textButtonStyleName) {
+		this(width, height, text, skin.get(BitmapFont.class), skin.get(labelStyleName, LabelStyle.class), skin.get(textButtonStyleName, TextButtonStyle.class), skin.get(TextButtonStyle.class));
+	}
+
+	/**
+	 * @param width
+	 * @param height
+	 * @param text
 	 * @param textFont
 	 * @param labelStyle
 	 * @param leftButtonStyle

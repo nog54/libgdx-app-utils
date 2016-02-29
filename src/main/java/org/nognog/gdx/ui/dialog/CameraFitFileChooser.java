@@ -50,7 +50,6 @@ public class CameraFitFileChooser extends Group implements CameraObserver {
 	private ListFileChooser chooser;
 
 	/**
-	 * @param camera
 	 * @param font
 	 * @param listener
 	 */
