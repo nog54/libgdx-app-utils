@@ -38,8 +38,7 @@ public class SimpleButton extends Button {
 	private final Image downImage;
 	private Label label;
 
-	private boolean autoScaleLabel = false; // but table does not support
-											// scaling
+	private boolean autoScaleLabel = false;
 
 	private static final Texture defaultUpTexture = UiUtils.createSimpleTexture(new Color(0.2f, 0.2f, 1, 1));
 	private static final Texture defaultDownTexture = UiUtils.createSimpleTexture(new Color(0.6f, 0.6f, 1, 1));
@@ -359,7 +358,7 @@ public class SimpleButton extends Button {
 	/**
 	 * @return the autoScaleLabel
 	 */
-	public boolean isAutoScaleLabel() {
+	public boolean isEnabledAutoScaleLabel() {
 		return this.autoScaleLabel;
 	}
 
@@ -367,7 +366,7 @@ public class SimpleButton extends Button {
 	 * @param autoScaleLabel
 	 *            the autoScaleLabel to set
 	 */
-	public void setAutoScaleLabel(boolean autoScaleLabel) {
+	public void setEnabledAutoScaleLabel(boolean autoScaleLabel) {
 		if (this.autoScaleLabel == autoScaleLabel) {
 			return;
 		}

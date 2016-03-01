@@ -42,6 +42,8 @@ public class SimpleSwitch extends Switch {
 	private Label onLabel;
 	private Label offLabel;
 
+	private boolean autoScaleLabel = false;
+
 	private static final Texture defaultOnTexture = UiUtils.createSimpleTexture(new Color(0.2f, 1f, 0.2f, 1));
 	private static final Texture defaultOffTexture = UiUtils.createSimpleTexture(new Color(0.6f, 1f, 0.6f, 1));
 
@@ -300,6 +302,29 @@ public class SimpleSwitch extends Switch {
 		this.offLabel.setPosition(this.getWidth() / 2, this.getHeight() / 2, Align.center);
 		this.onLabel.setVisible(this.getWidth() != 0 && this.getHeight() != 0);
 		this.offLabel.setVisible(this.getWidth() != 0 && this.getHeight() != 0);
+		this.autoScale();
+	}
+
+	/**
+	 * It may be overridden to achieve prefered scaling
+	 */
+	protected void autoScale() {
+		if (this.autoScaleLabel) {
+			// fix here if want
+			final float labelAreaWidth = this.getWidth() / 8 * 7;
+			final float labelAreaHeight = this.getHeight() / 8 * 7;
+
+			float offLabelScale = Math.min(1, labelAreaWidth / this.offLabel.getPrefWidth());
+			offLabelScale = Math.min(offLabelScale, labelAreaHeight / this.offLabel.getPrefHeight());
+			if (offLabelScale != 0) {
+				this.offLabel.setFontScale(offLabelScale);
+			}
+			float onLabelScale = Math.min(1, labelAreaWidth / this.onLabel.getPrefWidth());
+			onLabelScale = Math.min(onLabelScale, labelAreaHeight / this.onLabel.getPrefHeight());
+			if (onLabelScale != 0) {
+				this.onLabel.setFontScale(onLabelScale);
+			}
+		}
 	}
 
 	@Override
@@ -429,4 +454,24 @@ public class SimpleSwitch extends Switch {
 		return this.offImage;
 	}
 
+	/**
+	 * @return the autoScaleLabel
+	 */
+	public boolean isEnabledAutoScaleLabel() {
+		return this.autoScaleLabel;
+	}
+
+	/**
+	 * @param autoScaleLabel
+	 *            the autoScaleLabel to set
+	 */
+	public void setEnabledAutoScaleLabel(boolean autoScaleLabel) {
+		if (this.autoScaleLabel == autoScaleLabel) {
+			return;
+		}
+		this.autoScaleLabel = autoScaleLabel;
+		if (this.autoScaleLabel) {
+			this.autoScale();
+		}
+	}
 }
