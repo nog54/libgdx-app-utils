@@ -21,6 +21,8 @@ import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.input.GestureDetector;
 import com.badlogic.gdx.input.GestureDetector.GestureAdapter;
 import com.badlogic.gdx.input.GestureDetector.GestureListener;
@@ -37,7 +39,8 @@ import com.badlogic.gdx.utils.viewport.Viewport;
  */
 public abstract class ActorsActivity extends ApplicationActivity {
 	private final Stage stage;
-	private Color backgroundColor;
+	private Color wholeBackgroundColor;
+	private ShapeRenderer logicalWorldBackgroundRenderer;
 
 	private boolean isEnabledToMoveCameraX = false;
 	private boolean isEnabledToMoveCameraY = false;
@@ -61,7 +64,7 @@ public abstract class ActorsActivity extends ApplicationActivity {
 	 */
 	public ActorsActivity(Viewport viewport) {
 		this.stage = new Stage(viewport);
-		this.setBackgroundColor(Color.WHITE);
+		this.wholeBackgroundColor = new Color(Color.BLACK);
 		this.movableRange = new Range(0, viewport.getWorldWidth(), 0, viewport.getWorldHeight());
 		this.inputMultiplexer = new InputMultiplexer();
 		final GestureListener gestureListener = new GestureAdapter() {
@@ -182,8 +185,13 @@ public abstract class ActorsActivity extends ApplicationActivity {
 		if (this.isEnabledInertia) {
 			this.applyInertia(delta);
 		}
-		Gdx.gl.glClearColor(this.getBackgroundColor().r, this.getBackgroundColor().g, this.getBackgroundColor().b, this.getBackgroundColor().a);
+		Gdx.gl.glClearColor(this.wholeBackgroundColor.r, this.wholeBackgroundColor.g, this.wholeBackgroundColor.b, this.wholeBackgroundColor.a);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+		if (this.logicalWorldBackgroundRenderer != null) {
+			this.logicalWorldBackgroundRenderer.begin(ShapeType.Filled);
+			this.logicalWorldBackgroundRenderer.rect(0, 0, this.getLogicalViewportWidth(), this.getLogicalViewportHeight());
+			this.logicalWorldBackgroundRenderer.end();
+		}
 		this.stage.draw();
 	}
 
@@ -309,18 +317,43 @@ public abstract class ActorsActivity extends ApplicationActivity {
 	}
 
 	/**
+	 * @return the wholeBackgroundColor
+	 */
+	public Color getWholeBackgroundColor() {
+		return this.wholeBackgroundColor;
+	}
+
+	/**
+	 * @param wholeBackgroundColor
+	 *            the wholeBackgroundColor to set
+	 */
+	public void setWholeBackgroundColor(Color wholeBackgroundColor) {
+		this.wholeBackgroundColor = wholeBackgroundColor;
+	}
+
+	/**
 	 * @return the backgroundColor
 	 */
-	public Color getBackgroundColor() {
-		return this.backgroundColor;
+	public Color getBackgroundColorOfLogicalWorld() {
+		if (this.logicalWorldBackgroundRenderer == null) {
+			return null;
+		}
+		return this.logicalWorldBackgroundRenderer.getColor();
 	}
 
 	/**
 	 * @param backgroundColor
 	 *            the backgroundColor to set
 	 */
-	public void setBackgroundColor(Color backgroundColor) {
-		this.backgroundColor = backgroundColor;
+	public void setBackgroundColorOfLogicalWorld(Color backgroundColor) {
+		if (backgroundColor == null) {
+			this.logicalWorldBackgroundRenderer = null;
+			return;
+		}
+		if (this.logicalWorldBackgroundRenderer == null) {
+			this.logicalWorldBackgroundRenderer = new ShapeRenderer();
+		}
+		this.logicalWorldBackgroundRenderer.setColor(backgroundColor);
 	}
 
 	/**

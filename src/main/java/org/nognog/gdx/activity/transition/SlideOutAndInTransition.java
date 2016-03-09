@@ -172,7 +172,7 @@ public class SlideOutAndInTransition extends Transition {
 		from.getCamera().position.y = this.initialPositionOfFromCamera.y;
 		to.getCamera().position.x = this.initialPositionOfToCamera.x;
 		to.getCamera().position.y = this.initialPositionOfToCamera.y;
-		from.setBackgroundColor(this.initialBackgroundColorOfFrom);
+		from.setBackgroundColorOfLogicalWorld(this.initialBackgroundColorOfFrom);
 	}
 
 	/**
@@ -184,11 +184,11 @@ public class SlideOutAndInTransition extends Transition {
 		this.toActivityBorder = this.getBorder(to);
 		this.initialPositionOfFromCamera = new Vector2(from.getCamera().position.x, from.getCamera().position.y);
 		this.initialPositionOfToCamera = new Vector2(to.getCamera().position.x, to.getCamera().position.y);
-		this.initialBackgroundColorOfFrom = from.getBackgroundColor();
+		this.initialBackgroundColorOfFrom = new Color(from.getBackgroundColorOfLogicalWorld());
 
-		from.setBackgroundColor(new Color(this.initialBackgroundColorOfFrom));
-		final Color fromColor = from.getBackgroundColor();
-		final Color toColor = to.getBackgroundColor();
+		from.setBackgroundColorOfLogicalWorld(new Color(this.initialBackgroundColorOfFrom));
+		final Color fromColor = from.getBackgroundColorOfLogicalWorld();
+		final Color toColor = to.getBackgroundColorOfLogicalWorld();
 
 		this.slopeR = (toColor.r - fromColor.r) / this.timeToChangeBackground;
 		this.slopeG = (toColor.g - fromColor.g) / this.timeToChangeBackground;
@@ -285,7 +285,7 @@ public class SlideOutAndInTransition extends Transition {
 		final float addendG = this.slopeG * deltaTime;
 		final float addendB = this.slopeB * deltaTime;
 		final float addendA = this.slopeA * deltaTime;
-		from.getBackgroundColor().add(addendR, addendG, addendB, addendA);
+		from.getBackgroundColorOfLogicalWorld().add(addendR, addendG, addendB, addendA);
 	}
 
 	private void performSetActivity(float deltaTime, ActorsActivity from, ActorsActivity to) {
