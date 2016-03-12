@@ -96,8 +96,8 @@ public abstract class ActorsActivity extends ApplicationActivity {
 				}
 				final Camera camera = ActorsActivity.this.getCamera();
 				final Vector2 delta = new Vector2(deltaX, deltaY);
-				delta.x *= camera.viewportWidth / Gdx.graphics.getWidth();
-				delta.y *= camera.viewportHeight / Gdx.graphics.getHeight();
+				delta.x *= camera.viewportWidth / ActorsActivity.this.getStage().getViewport().getScreenWidth();
+				delta.y *= camera.viewportHeight / ActorsActivity.this.getStage().getViewport().getScreenHeight();
 				if (camera instanceof OrthographicCamera) {
 					this.moveCameraX(camera, -delta.x * ((OrthographicCamera) camera).zoom);
 					this.moveCameraY(camera, delta.y * ((OrthographicCamera) camera).zoom);
@@ -189,7 +189,9 @@ public abstract class ActorsActivity extends ApplicationActivity {
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		if (this.logicalWorldBackgroundRenderer != null) {
 			this.logicalWorldBackgroundRenderer.begin(ShapeType.Filled);
-			this.logicalWorldBackgroundRenderer.rect(0, 0, this.getLogicalViewportWidth(), this.getLogicalViewportHeight());
+			final float width = this.stage.getViewport().getScreenWidth();
+			final float height = this.stage.getViewport().getScreenHeight();
+			this.logicalWorldBackgroundRenderer.rect(0, 0, width, height);
 			this.logicalWorldBackgroundRenderer.end();
 		}
 		this.stage.draw();
@@ -293,6 +295,10 @@ public abstract class ActorsActivity extends ApplicationActivity {
 	@Override
 	public void resize(int width, int height) {
 		this.stage.getViewport().update(width, height);
+		if (this.logicalWorldBackgroundRenderer != null) {
+			this.logicalWorldBackgroundRenderer.getProjectionMatrix().setToOrtho2D(0, 0, this.stage.getViewport().getScreenWidth(), this.stage.getViewport().getScreenHeight());
+			this.logicalWorldBackgroundRenderer.updateMatrices();
+		}
 	}
 
 	/**
@@ -352,6 +358,7 @@ public abstract class ActorsActivity extends ApplicationActivity {
 		}
 		if (this.logicalWorldBackgroundRenderer == null) {
 			this.logicalWorldBackgroundRenderer = new ShapeRenderer();
+			this.logicalWorldBackgroundRenderer.getProjectionMatrix().setToOrtho2D(0, 0, this.stage.getViewport().getScreenWidth(), this.stage.getViewport().getScreenHeight());
 		}
 		this.logicalWorldBackgroundRenderer.setColor(backgroundColor);
 	}
