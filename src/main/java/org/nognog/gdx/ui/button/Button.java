@@ -49,9 +49,9 @@ public abstract class Button extends WidgetGroup {
 	}
 
 	/**
-	 * press this button
+	 * click this button
 	 */
-	public void press() {
+	public void click() {
 		if (this.listener != null) {
 			this.listener.click();
 		}

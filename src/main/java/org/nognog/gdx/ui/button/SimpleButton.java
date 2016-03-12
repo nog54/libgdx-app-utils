@@ -162,10 +162,9 @@ public class SimpleButton extends Button {
 					return;
 				}
 				if (this.isBeingPanned && !SimpleButton.this.isPannable()) {
-					return;
-				}
+					return;				}
 				if (SimpleButton.this.hit(x, y, true) == SimpleButton.this.getDownImage()) {
-					SimpleButton.this.press();
+					SimpleButton.this.click();
 				}
 				SimpleButton.this.showUpImage();
 			}
