@@ -29,7 +29,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
  * 
  * @author goshi 2015/05/05
  */
-public abstract class CameraFitSimpleYesNoDialog extends CameraFitSimpleDialog {
+public abstract class CameraFitSimpleYesNoDialog extends CameraFitSimpleTwoButtonDialog {
 
 	/**
 	 * @param text
@@ -66,14 +66,14 @@ public abstract class CameraFitSimpleYesNoDialog extends CameraFitSimpleDialog {
 	 */
 	public CameraFitSimpleYesNoDialog(String text, BitmapFont font, LabelStyle labelStyle, TextButtonStyle leftButtonStyle, TextButtonStyle rightButtonStyle) {
 		super(text, "Yes", "No", font, labelStyle, leftButtonStyle, rightButtonStyle); //$NON-NLS-1$ //$NON-NLS-2$
-		this.setListener(new SimpleDialogListener() {
+		this.setListener(new SimpleTwoButtonsDialogListener() {
 			@Override
-			public void rightButtonClicked() {
+			public void clickRightButton() {
 				CameraFitSimpleYesNoDialog.this.no();
 			}
 
 			@Override
-			public void leftButtonClicked() {
+			public void clickLeftButton() {
 				CameraFitSimpleYesNoDialog.this.yes();
 			}
 		});

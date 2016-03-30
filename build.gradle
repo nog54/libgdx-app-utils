@@ -18,7 +18,7 @@ sourceSets.test.resources.srcDirs = ["src/test/resources/"]
 eclipse.project { name = "libgdx-app-utils" }
 
 ext{
-	gdxVersion = '1.7.0'
+	gdxVersion = '1.9.2'
 	libgdxUtilsVersion = '0.13.1'
 }
 
@@ -44,6 +44,8 @@ repositories {
 
 dependencies {
 	compile "com.badlogicgames.gdx:gdx:$gdxVersion"
+	//	compile "com.badlogicgames.gdx:gdx-tools:$gdxVersion"	it enables when FontUtils is used
+	compile "com.badlogicgames.gdx:gdx-freetype:$gdxVersion"
 	compile "net.dermetfan.libgdx-utils:libgdx-utils:$libgdxUtilsVersion"
 
 	testCompile "junit:junit:+"

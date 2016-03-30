@@ -22,7 +22,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 /**
  * @author goshi 2015/04/24
  */
-public abstract class SimpleYesNoDialog extends SimpleDialog {
+public abstract class SimpleYesNoDialog extends SimpleTwoButtonsDialog {
 
 	/**
 	 * @param width
@@ -67,14 +67,14 @@ public abstract class SimpleYesNoDialog extends SimpleDialog {
 	 */
 	public SimpleYesNoDialog(float width, float height, String text, BitmapFont textFont, LabelStyle labelStyle, TextButtonStyle leftButtonStyle, TextButtonStyle rightButtonStyle) {
 		super(width, height, text, "Yes", "No", textFont, labelStyle, leftButtonStyle, rightButtonStyle); //$NON-NLS-1$ //$NON-NLS-2$
-		this.setListener(new SimpleDialog.SimpleDialogListener() {
+		this.setListener(new SimpleTwoButtonsDialog.SimpleTwoButtonsDialogListener() {
 			@Override
-			public void rightButtonClicked() {
+			public void clickRightButton() {
 				SimpleYesNoDialog.this.no();
 			}
 
 			@Override
-			public void leftButtonClicked() {
+			public void clickLeftButton() {
 				SimpleYesNoDialog.this.yes();
 			}
 		});

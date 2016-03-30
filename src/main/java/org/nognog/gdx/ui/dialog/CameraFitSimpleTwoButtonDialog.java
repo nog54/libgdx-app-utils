@@ -30,7 +30,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
  * 
  * @author goshi 2015/05/05
  */
-public class CameraFitSimpleDialog extends SimpleDialog implements CameraObserver {
+public class CameraFitSimpleTwoButtonDialog extends SimpleTwoButtonsDialog implements CameraObserver {
 
 	/**
 	 * @param text
@@ -38,7 +38,7 @@ public class CameraFitSimpleDialog extends SimpleDialog implements CameraObserve
 	 * @param rightButtonText
 	 * @param font
 	 */
-	public CameraFitSimpleDialog(String text, String leftButtonText, String rightButtonText, BitmapFont font) {
+	public CameraFitSimpleTwoButtonDialog(String text, String leftButtonText, String rightButtonText, BitmapFont font) {
 		this(text, leftButtonText, rightButtonText, font, createLabelStyle(font), createButtonStyle(font), createButtonStyle(font));
 	}
 
@@ -51,7 +51,7 @@ public class CameraFitSimpleDialog extends SimpleDialog implements CameraObserve
 	 * @param leftButtonStyle
 	 * @param rightButtonStyle
 	 */
-	public CameraFitSimpleDialog(String text, String leftButtonText, String rightButtonText, BitmapFont font, LabelStyle labelStyle, TextButtonStyle leftButtonStyle,
+	public CameraFitSimpleTwoButtonDialog(String text, String leftButtonText, String rightButtonText, BitmapFont font, LabelStyle labelStyle, TextButtonStyle leftButtonStyle,
 			TextButtonStyle rightButtonStyle) {
 		super(0, 0, text, leftButtonText, rightButtonText, font, labelStyle, leftButtonStyle, rightButtonStyle);
 	}
@@ -62,7 +62,7 @@ public class CameraFitSimpleDialog extends SimpleDialog implements CameraObserve
 	 * @param rightButtonText
 	 * @param skin
 	 */
-	public CameraFitSimpleDialog(String text, String leftButtonText, String rightButtonText, Skin skin) {
+	public CameraFitSimpleTwoButtonDialog(String text, String leftButtonText, String rightButtonText, Skin skin) {
 		super(0, 0, text, leftButtonText, rightButtonText, skin);
 	}
 	
@@ -74,7 +74,7 @@ public class CameraFitSimpleDialog extends SimpleDialog implements CameraObserve
 	 * @param labelStyleName 
 	 * @param textButtonStyleName 
 	 */
-	public CameraFitSimpleDialog(String text, String leftButtonText, String rightButtonText, Skin skin, String labelStyleName, String textButtonStyleName) {
+	public CameraFitSimpleTwoButtonDialog(String text, String leftButtonText, String rightButtonText, Skin skin, String labelStyleName, String textButtonStyleName) {
 		super(0, 0, text, leftButtonText, rightButtonText, skin, labelStyleName, textButtonStyleName);
 	}
 
