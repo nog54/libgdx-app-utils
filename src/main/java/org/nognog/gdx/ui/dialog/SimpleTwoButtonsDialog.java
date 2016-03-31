@@ -102,14 +102,9 @@ public class SimpleTwoButtonsDialog extends SimpleDialog {
 	 */
 	public SimpleTwoButtonsDialog(float width, float height, String text, String leftButtonText, String rightButtonText, BitmapFont textFont, LabelStyle labelStyle, TextButtonStyle leftButtonStyle,
 			TextButtonStyle rightButtonStyle) {
-		super(width, height);
-		final Table table = this.getTable();
 		this.textLabel = new Label(text, labelStyle);
-		this.textLabel.setWidth(width);
 		this.textLabel.setWrap(true);
-		final float goldenRatio = Constants.getGoldenRatio();
-		final float wholeSpace = width / (3 + 2 * goldenRatio) / 2;
-		table.pad(wholeSpace);
+		final Table table = this.getTable();
 		table.add(this.textLabel).left().fillX().colspan(2).row();
 		this.leftButton = new TextButton(leftButtonText, leftButtonStyle);
 		this.rightButton = new TextButton(rightButtonText, rightButtonStyle);
@@ -129,12 +124,22 @@ public class SimpleTwoButtonsDialog extends SimpleDialog {
 				}
 			}
 		});
-		final float widgetsSpan = wholeSpace * 2;
-		table.add(this.leftButton).expandX().fillX().expandY().uniform().padRight(widgetsSpan / 2);
-		table.add(this.rightButton).expandX().fillX().expandY().uniform().padLeft(widgetsSpan / 2);
-		table.setBackground(UiUtils.getPlaneTextureRegionDrawable(1, 1, ColorUtils.clearBlack));
+		
+		table.add(this.leftButton).fillX().expand().uniform();
+		table.add(this.rightButton).fillX().expand().uniform();
+		this.setSize(width, height);
 	}
 
+	@Override
+	protected void sizeChanged() {
+		super.sizeChanged();
+		if(this.leftButton != null && this.rightButton != null){
+			final float widgetsSpan = this.getWidth() / (3 + 2 * Constants.getGoldenRatio());
+			this.getTable().getCell(this.leftButton).padRight(widgetsSpan / 2);
+			this.getTable().getCell(this.rightButton).padLeft(widgetsSpan / 2);
+		}
+	}
+	
 	/**
 	 * @return listener
 	 */

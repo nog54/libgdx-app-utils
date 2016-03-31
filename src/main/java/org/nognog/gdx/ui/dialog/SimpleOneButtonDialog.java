@@ -94,15 +94,10 @@ public class SimpleOneButtonDialog extends SimpleDialog {
 	 * @param buttonStyle
 	 */
 	public SimpleOneButtonDialog(float width, float height, String text, String buttonText, BitmapFont textFont, LabelStyle labelStyle, TextButtonStyle buttonStyle) {
-		super(width, height);
 		this.textLabel = new Label(text, labelStyle);
-		this.textLabel.setWidth(width);
 		this.textLabel.setWrap(true);
-		final float goldenRatio = Constants.getGoldenRatio();
-		final float wholeSpace = width / (3 + 2 * goldenRatio) / 2;
 		final Table table = this.getTable();
-		table.pad(wholeSpace);
-		table.add(this.textLabel).left().fillX().row();
+		table.add(this.textLabel).expand().left().fillX().row();
 		this.button = new TextButton(buttonText, buttonStyle);
 		this.button.addListener(new ClickListener() {
 			@Override
@@ -112,7 +107,19 @@ public class SimpleOneButtonDialog extends SimpleDialog {
 				}
 			}
 		});
-		table.add(this.button).expandX().fillX().expandY();
+		final float buttonWidth = Constants.getGoldenRatio() / (1 + Constants.getGoldenRatio()) * width;
+		this.button.setWidth(buttonWidth);
+		table.add(this.button).expand();
+		this.setSize(width, height);
+	}
+	
+	@Override
+	protected void sizeChanged() {
+		super.sizeChanged();
+		if(this.button != null){
+			final float buttonWidth = Constants.getGoldenRatio() / (1 + Constants.getGoldenRatio()) * this.getWidth();
+			this.getTable().getCell(this.button).prefWidth(buttonWidth);
+		}
 	}
 
 	/**
@@ -141,6 +148,13 @@ public class SimpleOneButtonDialog extends SimpleDialog {
 	 */
 	public void setButtonText(String text) {
 		this.button.setText(text);
+	}
+
+	/**
+	 * @return the button
+	 */
+	public TextButton getButton() {
+		return this.button;
 	}
 
 	/**
