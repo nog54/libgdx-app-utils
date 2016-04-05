@@ -165,6 +165,13 @@ public class SimpleOneButtonDialog extends SimpleDialog {
 	}
 
 	/**
+	 * @return the text
+	 */
+	public String getText(){
+		return this.textLabel.getText().toString();
+	}
+	
+	/**
 	 * @author goshi 2015/05/05
 	 */
 	public static abstract class SimpleOneButtonDialogListener {

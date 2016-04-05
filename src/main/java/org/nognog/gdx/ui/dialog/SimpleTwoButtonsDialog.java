@@ -188,6 +188,13 @@ public class SimpleTwoButtonsDialog extends SimpleDialog {
 	public void setText(String text) {
 		this.textLabel.setText(text);
 	}
+	
+	/**
+	 * @return the text
+	 */
+	public String getText(){
+		return this.textLabel.getText().toString();
+	}
 
 	/**
 	 * @author goshi 2015/05/05
