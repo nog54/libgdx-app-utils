@@ -14,7 +14,9 @@
 
 package org.nognog.gdx.activity;
 
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.utils.ObjectMap;
@@ -24,7 +26,7 @@ import com.badlogic.gdx.utils.ObjectMap;
  */
 public class ApplicationConfigurations {
 	private final ObjectMap<String, Object> configurations;
-
+	
 	/**
 	 * 
 	 */
@@ -40,8 +42,19 @@ public class ApplicationConfigurations {
 	@SuppressWarnings("unchecked")
 	public <T> T get(Class<T> klass, String name) {
 		try {
-			return (T) this.configurations.get(name);
-		} catch (ClassCastException e) {
+			final T result = (T) this.configurations.get(name);
+			if (result instanceof String) {
+				if (klass == Float.class)
+					return (T) Boolean.valueOf(Boolean.parseBoolean((String) result));
+				if (klass == Integer.class)
+					return (T) Integer.valueOf(Integer.parseInt((String) result));
+				if (klass == Long.class)
+					return (T) Long.valueOf(Long.parseLong((String) result));
+				if (klass == Float.class)
+					return (T) Float.valueOf(Float.parseFloat((String) result));
+			}
+			return result;
+		} catch (Exception e) {
 			return null;
 		}
 	}
@@ -57,15 +70,19 @@ public class ApplicationConfigurations {
 	/**
 	 * @param pref
 	 * @param overwrite
+	 * @return a set whose elements are the keys which weren't read
 	 */
-	public void readPreferences(Preferences pref, boolean overwrite) {
+	public Set<String> readPreferences(Preferences pref, boolean overwrite) {
+		final Set<String> notReadPreferences = new HashSet<>();
 		final Map<String, ?> map = pref.get();
 		for (String key : map.keySet()) {
 			if (overwrite == false && this.configurations.containsKey(key)) {
+				notReadPreferences.add(key);
 				continue;
 			}
 			this.configurations.put(key, map.get(key));
 		}
+		return notReadPreferences;
 	}
 
 	/**
