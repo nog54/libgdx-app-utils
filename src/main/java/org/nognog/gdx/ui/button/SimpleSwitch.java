@@ -58,6 +58,14 @@ public class SimpleSwitch extends Switch {
 
 	/**
 	 * @param initValue
+	 * @param skin
+	 */
+	public SimpleSwitch(boolean initValue, Skin skin) {
+		this(initValue, skin.get(BitmapFont.class));
+	}
+
+	/**
+	 * @param initValue
 	 * @param font
 	 */
 	public SimpleSwitch(boolean initValue, BitmapFont font) {

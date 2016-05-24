@@ -53,6 +53,13 @@ public class SimpleButton extends Button {
 	}
 
 	/**
+	 * @param skin
+	 */
+	public SimpleButton(Skin skin) {
+		this(skin.get(BitmapFont.class));
+	}
+
+	/**
 	 * @param font
 	 */
 	public SimpleButton(BitmapFont font) {
@@ -162,7 +169,8 @@ public class SimpleButton extends Button {
 					return;
 				}
 				if (this.isBeingPanned && !SimpleButton.this.isPannable()) {
-					return;				}
+					return;
+				}
 				if (SimpleButton.this.hit(x, y, true) == SimpleButton.this.getDownImage()) {
 					SimpleButton.this.click();
 				}
