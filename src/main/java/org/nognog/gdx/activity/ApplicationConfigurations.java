@@ -44,7 +44,7 @@ public class ApplicationConfigurations {
 		try {
 			final T result = (T) this.configurations.get(name);
 			if (result instanceof String) {
-				if (klass == Float.class)
+				if (klass == Boolean.class)
 					return (T) Boolean.valueOf(Boolean.parseBoolean((String) result));
 				if (klass == Integer.class)
 					return (T) Integer.valueOf(Integer.parseInt((String) result));
