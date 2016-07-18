@@ -57,6 +57,13 @@ public abstract class ActivityBasedApplication extends Game {
 			return;
 		}
 	}
+	
+	/**
+	 * @return true if transition is performing
+	 */
+	public boolean isPerformingTransition(){
+		return this.transition != null;
+	}
 
 	/**
 	 * @param activity
